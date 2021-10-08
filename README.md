@@ -18,7 +18,7 @@ The game is gonna be a player 1 and player 2 design with the option to play agai
   - Ability to set a custom photo as chip icon through HTML, CSS and JavaScript to store the image from the end user-input
   - Designs the connect board using CSS
   - Users are able to interact with the connect board using HTML buttons.
-  - Users are able to see the winner in HTML format.
+  - Users are able to see the winner in an alert
   - Computer choices for chip drops in the game will be determined by an algorithm of arrays in JavaScript
   - When player hovers over column css will display chip above the column
   - When there is no space for a chip, an error message will appear using Javascript
