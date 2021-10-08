@@ -16,7 +16,7 @@ The game is gonna be a player 1 and player 2 design with the option to play agai
   - The languages being used are HTML, CSS, Javascript.
   - User can choose between Player vs Player and Player vs Computer using HTML buttons and event driven through JavaScript
   - Ability to set a custom photo as chip icon through HTML, CSS and JavaScript to store the image from the end user-input
-  - Designs the connect board using css
+  - Designs the connect board using CSS
   - Users are able to interact with the connect board using HTML buttons.
   - Users are able to see the winner in HTML format.
   - Computer choices for chip drops in the game will be determined by an algorithm of arrays in JavaScript
