@@ -14,6 +14,8 @@ The game is gonna be a player 1 and player 2 design with the option to play agai
  Functional Requirements:
  
   - The languages being used are HTML, CSS, Javascript.
+  -  there will be a button that goes to a screen where they are told the controls and how to play the game like how to place chips
+  -  ther will be a button that lets you go and drag or take a picture of your chips(expanded on further)
   - there will be two screens one where the user can choose between game mdoe/options and then event driven through JavaScript using HTML buttons, the game options will be computer vs player and player vs player
   - Ability to set a custom photo as chip icon through HTML, CSS and JavaScript to store the image from the end user-input
   - Designs the connect board using CSS
