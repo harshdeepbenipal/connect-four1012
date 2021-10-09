@@ -9,7 +9,7 @@ Project Title: Connect 4
 
 Project Description:
 
-The game is gonna be a player 1 and player 2 design with the option to play against the computer on easy, medium, hard difficulty. The connect board has 7 columns and 6 rows. In which the user is given the choice to add their coloured chip to one of the 7 columns within a certain amount of time determined by the difficulty chosen at the start. The board will use 2 dimensional arrays, loops, and conditional statements to determine both the validity of the user’s input, and determine the winner. The win will be determined by whether the user or computer has 4 pieces in either a horizontal, vertical or diagonal line. The visual concept behind the connect 4 will be either yellow and red chips or chip designed on an image capture of the player if they choose to do so. 
+The game is gonna be a player 1 and player 2 design with the option to play against the computer. The connect board has 7 columns and 6 rows. In which the user is given the choice to add their coloured chip to one of the 7 columns within a certain amount of time determined by the difficulty chosen at the start. The board will use 2 dimensional arrays, loops, and conditional statements to determine both the validity of the user’s input, and determine the winner. The win will be determined by whether the user or computer has 4 pieces in either a horizontal, vertical or diagonal line. The visual concept behind the connect 4 will be either yellow and red chips or chip designed on an image capture of the player if they choose to do so. 
 
  Functional Requirements:
  
