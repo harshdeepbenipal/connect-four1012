@@ -28,3 +28,5 @@ The game is gonna be a player 1 and player 2 design with the option to play agai
   - When a winner is determined all chips other than the 4 winning chips will be set not visible through arrays that will be checked each time a chip is displayed inside a box/circle.
   - where there is no winner meaning that the board is filled with no winning solutions left the array will be checked and if the board is filled it will display a alert that tells the user it is a tie and gives the option for play again or return to main menu
   - At the end of each game there will be a alert that pops up that gives the user options to play again and the board will reset or to choose a new mode and return to the main menu.
+
+Phase 2 Wireframe google drive link: https://drive.google.com/drive/folders/1flPNLmrOP-S8zKKXdiVwOEXt5vtZ0sMF?usp=sharing
