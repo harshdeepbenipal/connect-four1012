@@ -1,1 +1,1 @@
-print("i love this course 2")
+print("personal repo test")
