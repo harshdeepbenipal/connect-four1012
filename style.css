@@ -1,0 +1,28 @@
+*{
+    font-family: 'Courier New', Courier, monospace;
+}
+#box {
+    border: 3px solid black;
+    width: 100%;
+    margin:auto;
+    text-align: center;
+    font-size: 70px;
+    font-style: italic;
+    overflow:auto;
+    line-height: 0px;
+}
+#start{
+    text-align: center;
+}
+#startButton{
+    text-align: center;
+    padding: 14px 28px;
+    font-size: 30px;
+    width:auto;
+    margin-top: 100px;
+}
+footer{
+    position:fixed;
+    bottom:0px;
+    text-align:center;
+}
