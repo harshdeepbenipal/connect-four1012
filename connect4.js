@@ -33,5 +33,74 @@ function firstFreeRow(column) {
     if (gameboardArray[column][i] == 0) {
       return i;
     }
-  } 
+  }
+}
+
+function checkHorizontal() {
+  var firstChip;
+  var numInRow = 1;
+  var lastChip;
+  for (i = 0; i < 6; i++) {     //going through each row 
+    for (j = 0; j < 7; j++) { 
+
+      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
+        numInRow += 1;
+      } else {
+        numInRow = 1;
+      }
+      lastChip = gameboardArray[i][j];
+
+      if (numInRow == 4) {
+        return lastChip;
+      }
+    }
+  }
+}
+
+function checkVertical() {
+  var firstChip;
+  var numInRow = 1;
+  var lastChip;
+  for (j = 0; j < 7; j++) {     //going through each column 
+    for (i = 0; i < 6; i++) { 
+      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
+        numInRow += 1;
+      } else {
+        numInRow = 1;
+      }
+      lastChip = gameboardArray[i][j];
+
+      if (numInRow == 4) {
+        return lastChip;
+      }
+    }
+  }
+}
+
+function checkDiagonalDownRight() {
+  var firstChip;
+  var numInRow = 1;
+  var lastChip;
+
+
+  j = 0;
+  for (i = 4; i > 0; i--) {     //going through each row 
+      
+    while ( j < 7) {
+    j = j+1
+
+      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
+        numInRow += 1;
+      } else {
+        numInRow = 1;
+      }
+      lastChip = gameboardArray[i][j];
+
+      if (numInRow == 4) {
+        return lastChip;
+      }
+    }
+  }
+  
+}
 }
