@@ -3,9 +3,12 @@ var gameboardArray = new Array[7][6];
 //empty = 0, p1 = 1, p2 = 2
 
 function playButton() {
-  console.log("working");
+  $("#startButton").css({'visibility' : 'hidden'});
+  $("#box").css({'visibility' : 'hidden'});
 }
-
+function help(){
+  alert("Instructions...");
+}
 function previewFile() {
   const preview = document.querySelector('img');
   const file = document.querySelector('input[type=file]').files[0];
@@ -102,5 +105,4 @@ function checkDiagonalDownRight() {
     }
   }
   
-}
 }
