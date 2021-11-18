@@ -1,8 +1,9 @@
 *{
     font-family: 'Courier New', Courier, monospace;
+    background-color: #498ACC;
 }
 #box {
-    border: 3px solid black;
+    /*border: 3px solid black;*/
     width: 100%;
     margin:auto;
     text-align: center;
@@ -10,6 +11,15 @@
     font-style: italic;
     overflow:auto;
     line-height: 0px;
+    color: white;
+    background-image:url("images/headerBackground.png");
+}
+button{
+    background-color: #2458A2;
+    color: white;
+}
+button:hover{
+    background-color: #182b69;
 }
 #start{
     text-align: center;
