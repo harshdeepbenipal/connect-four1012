@@ -5,19 +5,27 @@
   <meta charset="utf-8">
   <title> Connect 4 </title>
   <link href="style.css" type="text/css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="connect4.js"></script>
 </head>
 
 <body>
   <div id="box">
-    <p id="title" class="title">Welcome to Connect 4</p>
-
-    <p> <button id="button" onclick="playButton();"> Play </button></p>
-    <input type="file" onchange="previewFile()"><br>
-    <img src="" height="200" alt="Image preview...">
-    
-
+    <p id="title" class="title">CONNECT 4</p>
   </div>
-</body>
+  <div id="start">
+    <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> START ▷ </button></p>
+  </div> 
+  <div id="mode">
+    <p> <button hidden id="gameMode1" title= "Player Vs Computer" onclick="gameMode(false);"> Player Vs Computer </button></p>
+    <p> <button hidden id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
+  </div>
+  <!--type="hidden"--> 
+  <input type="file" onchange="previewFile()"><br>
+  <img id= "img" hidden src="" height="200" alt="Image preview...">
+  <footer>
+    <p> <button id="helpButton" title= "HELP" onclick="help();"> ? </button></p>
+  </footer>
+  </body>
 
 </html>

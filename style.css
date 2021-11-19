@@ -1,0 +1,44 @@
+*{
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #498ACC;
+}
+#box {
+    /*border: 3px solid black;*/
+    width: 100%;
+    margin:auto;
+    text-align: center;
+    font-size: 70px;
+    font-style: italic;
+    overflow:auto;
+    line-height: 0px;
+    color: white;
+    background-image:url("images/headerBackground.png");
+}
+button{
+    background-color: #2458A2;
+    color: white;
+}
+button:hover{
+    background-color: #182b69;
+}
+#start{
+    text-align: center;
+}
+#startButton{
+    text-align: center;
+    padding: 14px 28px;
+    font-size: 30px;
+    width:auto;
+    margin-top: 100px;
+}
+footer{
+    position:fixed;
+    bottom:0px;
+    text-align:center;
+}
+#mode{
+    text-align: center;
+    font-size: 30px;
+    font-size:200%;
+    transform: translateY(-70%);
+}
