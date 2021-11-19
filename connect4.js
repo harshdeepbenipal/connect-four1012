@@ -4,10 +4,39 @@ var gameboardArray = new Array[7][6];
 
 function playButton() {
   $("#startButton").css({'visibility' : 'hidden'});
-  $("#box").css({'visibility' : 'hidden'});
+  //$("#box").css({'visibility' : 'hidden'});
+  var element = document.getElementById("title");
+  element.innerHTML = "CHOOSE A GAME MODE";
+  mode(1,'hidden');
 }
 function help(){
   alert("Instructions...");
+}
+function mode(a,b){
+  if(a==1){
+    $("#gameMode1").removeAttr(b);
+    $("#gameMode2").removeAttr(b);
+  }
+  else if(a==2){
+    $("#gameMode1").attr(b,true);
+    $("#gameMode2").attr(b,true);
+  }
+}
+function gameMode(a){
+  mode(2,'hidden');
+  if (a==true){
+    //alert("Player1 vs Player2");
+  }else{
+    //alert("Player vs Computer");
+  }
+  var element = document.getElementById("title");
+  element.innerHTML = "DESIGN YOUR CHIP";
+  designChip();
+}
+function designChip(){
+  $("#img").removeAttr('hidden');
+  //var e = document.getElementById("file");
+  //e.type='visible';
 }
 function previewFile() {
   const preview = document.querySelector('img');
