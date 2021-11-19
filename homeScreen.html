@@ -14,10 +14,15 @@
     <p id="title" class="title">CONNECT 4</p>
   </div>
   <div id="start">
-    <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> PLAY </button></p>
-  </div>  
+    <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> START ▷ </button></p>
+  </div> 
+  <div id="mode">
+    <p> <button hidden id="gameMode1" title= "Player Vs Computer" onclick="gameMode(false);"> Player Vs Computer </button></p>
+    <p> <button hidden id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
+  </div>
+  <!--type="hidden"--> 
   <input type="file" onchange="previewFile()"><br>
-  <img src="" height="200" alt="Image preview...">
+  <img id= "img" hidden src="" height="200" alt="Image preview...">
   <footer>
     <p> <button id="helpButton" title= "HELP" onclick="help();"> ? </button></p>
   </footer>
