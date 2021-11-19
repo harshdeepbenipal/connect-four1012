@@ -36,3 +36,9 @@ footer{
     bottom:0px;
     text-align:center;
 }
+#mode{
+    text-align: center;
+    font-size: 30px;
+    font-size:200%;
+    transform: translateY(-70%);
+}
