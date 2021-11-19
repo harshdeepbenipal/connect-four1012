@@ -1,11 +1,19 @@
-var gameboardArray = new Array[7][6];
+//var gameboardArray = new Array[7][6];
+//var imageArray = new Array[7][6];
+var gameboardArray = [];
+    for(let i = 0; i < 7; i++) {
+        gameboardArray[i] = new Array(6);
+        for(let j = 0; j < 6; j++) {
+          gameboardArray[i][j] = 0;
+      }
+    }            
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
-
+playernum  = 1;
 function playButton() {
   $("#startButton").css({'visibility' : 'hidden'});
   //$("#box").css({'visibility' : 'hidden'});
-  var element = document.getElementById("title");
+  var element = document.getElementById("title1");
   element.innerHTML = "CHOOSE A GAME MODE";
   mode(1,'hidden');
 }
@@ -29,14 +37,23 @@ function gameMode(a){
   }else{
     //alert("Player vs Computer");
   }
-  var element = document.getElementById("title");
+  var element = document.getElementById("title1");
   element.innerHTML = "DESIGN YOUR CHIP";
   designChip();
 }
 function designChip(){
-  $("#img").removeAttr('hidden');
+  $("#imgselect").removeAttr('hidden');
   //var e = document.getElementById("file");
   //e.type='visible';
+}
+
+function gameScreen(){
+  $("#imageselector").hide();
+  $("#img").hide();
+  $("#go").hide();
+  $("#board1").css({'visibility' : 'visible'});
+  $("#selection").css({'visibility' : 'visible'});
+  
 }
 function previewFile() {
   const preview = document.querySelector('img');
@@ -55,13 +72,15 @@ function previewFile() {
 
 
 function addChip(playernum, column) {
-  if (firstFreeRow(column) > 6) {
+  if (firstFreeRow(column) < 6) {
     gameboardArray[column][firstFreeRow(column)] = playernum; 
   }
+  console.log(gameboardArray[0]);
 }
 
 function firstFreeRow(column) {
   for (i = 0; i < 6; i++) {
+    console.log(gameboardArray[column][i]);
     if (gameboardArray[column][i] == 0) {
       return i;
     }

@@ -11,7 +11,7 @@
 
 <body>
   <div id="box">
-    <p id="title" class="title">CONNECT 4</p>
+    <p id="title1" class="title">CONNECT 4</p>
   </div>
   <div id="start">
     <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> START ▷ </button></p>
@@ -21,8 +21,25 @@
     <p> <button hidden id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
   </div>
   <!--type="hidden"--> 
-  <input type="file" onchange="previewFile()"><br>
-  <img id= "img" hidden src="" height="200" alt="Image preview...">
+  <div hidden id = "imgselect">
+  <input id="imageselector" type="file" onchange="previewFile()"><br>
+  <img id= "img" src="" height="200" alt="Image preview...">
+  <p><button id="go" title="takes it to gameScreen" onclick="gameScreen();"> Let's Play </button></p>
+</div>
+<div id="selection">
+  <nav>
+  <button  onclick="addChip(1,'0');"> 1st row </button>
+  <button  onclick="addChip(1,'1');"> 2nd row </button>
+  <button  onclick="addChip(1,'2');"> 3rd row </button>
+  <button  onclick="addChip(1,'3');"> 4th row </button>
+  <button  onclick="addChip(1,'4');"> 5th row </button>
+  <button  onclick="addChip(1,'5');"> 6th row </button>
+  <button  onclick="addChip(1,'6');"> 7th row </button>
+</nav>
+</div>
+<div id="board1">
+  <img id = "board" src="images/Connect4Board.jpg" alt="boardimage" >
+</div>
   <footer>
     <p> <button id="helpButton" title= "HELP" onclick="help();"> ? </button></p>
   </footer>
