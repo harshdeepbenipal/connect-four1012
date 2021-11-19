@@ -61,7 +61,7 @@ function addChip(playernum, column) {
 }
 
 function firstFreeRow(column) {
-  for (i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     if (gameboardArray[column][i] == 0) {
       return i;
     }
@@ -72,8 +72,8 @@ function checkHorizontal() {
   var firstChip;
   var numInRow = 1;
   var lastChip;
-  for (i = 0; i < 6; i++) {     //going through each row 
-    for (j = 0; j < 7; j++) { 
+  for (let i = 0; i < 6; i++) {     //going through each row 
+    for (let j = 0; j < 7; j++) { 
 
       if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
         numInRow += 1;
@@ -93,8 +93,8 @@ function checkVertical() {
   var firstChip;
   var numInRow = 1;
   var lastChip;
-  for (j = 0; j < 7; j++) {     //going through each column 
-    for (i = 0; i < 6; i++) { 
+  for (let j = 0; j < 7; j++) {     //going through each column 
+    for (let i = 0; i < 6; i++) { 
       if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
         numInRow += 1;
       } else {
@@ -115,8 +115,8 @@ function checkDiagonalDownRight() {
   var lastChip;
 
 
-  j = 0;
-  for (i = 4; i > 0; i--) {     //going through each row 
+  var j = 0;
+  for (let i = 4; i > 0; i--) {     //going through each row 
       
     while ( j < 7) {
     j = j+1
