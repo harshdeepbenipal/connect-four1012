@@ -17,17 +17,18 @@
     <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> START ▷ </button></p>
   </div> 
   <div id="mode">
-    <p> <button hidden id="gameMode1" title= "Player Vs Computer" onclick="gameMode(false);"> Player Vs Computer </button></p>
-    <p> <button hidden id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
+    <p> <button style="display: none;"class = "gmode" id="gameMode1" title= "Player Vs Computer" onclick="gameMode(false);"> Player Vs Computer </button></p>
+    <p> <button style="display: none;"class = "gmode" id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
   </div>
-  <!--type="hidden"--> 
-  <div hidden id = "imgselect">
-  <input id="imageselector" type="file" onchange="previewFile()"><br>
-  <img id= "img" class = "userImage" src="" height="200" alt="Image preview...">
-  <p><button id="go" title="takes it to gameScreen" onclick="gameScreen();"> Let's Play </button></p>
-</div>
+  <div id="design2">
+    <div style="display:none" id = "imgselect">
+      <input class= "pFile" id="imageselector" type="file" onchange="previewFile()"><br>
+      <img id= "img" class = "userImage" src="" height="200" alt="Image preview...">
+    </div>
+  </div>
+  <p><button style="display:none" id="go" title="takes it to gameScreen" onclick="gameScreen();"> NEXT ▷ </button></p>
 <div id="selection">
-  <nav>
+  <nav id="add">
   <button  onclick="addChip(0);"> 1st row </button>
   <button  onclick="addChip(1);"> 2nd row </button>
   <button  onclick="addChip(2);"> 3rd row </button>
