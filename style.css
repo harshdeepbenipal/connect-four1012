@@ -45,16 +45,43 @@ footer{
 
 #board1{
     display: inherit;
-    image-orientation: inherit;
     margin-top: auto;
     margin-left: auto;
     margin-right: auto;
     width: 75%;
     visibility: hidden;
+    align-self: center;
+    align-content: center;
+    text-align: center;
+    z-index: 1;
+    position: relative;
+    height: 480px;
+    width: 660px;
 }
 
 #selection{
     display: inherit;
     visibility: hidden;
     text-align: center;
+    align-self: center;
+
+}
+#board{
+    align-self: center;
+    z-index: -2;
+    position: absolute;
+    height: 480px;
+    width: 640px;
+    
+}
+.chipimgclass{
+    width: 80px;
+    height: 80px;
+    z-index: 2;
+    margin-left: 6px;
+
+    margin-right: 6px;
+
+
+    border-radius: 50%;
 }
