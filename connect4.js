@@ -15,48 +15,43 @@ var userImageSrc;
 //empty = 0, p1 = 1, p2 = 2
 playernum  = 1;
 function playButton() {
-  $("#startButton").css({'visibility' : 'hidden'});
-  //$("#box").css({'visibility' : 'hidden'});
+  $("#startButton").css({'display' : 'none'});
   var element = document.getElementById("title1");
   element.innerHTML = "CHOOSE A GAME MODE";
-  mode(1,'hidden');
+  mode('block');
 }
 function help(){
   alert("Instructions...");
 }
-function mode(a,b){
-  if(a==1){
-    $("#gameMode1").removeAttr(b);
-    $("#gameMode2").removeAttr(b);
-  }
-  else if(a==2){
-    $("#gameMode1").attr(b,true);
-    $("#gameMode2").attr(b,true);
-  }
+function mode(b){
+  $("#gameMode1").css({'display' : b});
+  $("#gameMode2").css({'display': b});
 }
 function gameMode(a){
-  mode(2,'hidden');
+  mode('none');
   if (a==true){
     //alert("Player1 vs Player2");
   }else{
     //alert("Player vs Computer");
   }
   var element = document.getElementById("title1");
-  element.innerHTML = "DESIGN YOUR CHIP";
+  element.innerHTML = "DESIGN YOUR CHIPS";
   designChip();
 }
 function designChip(){
-  $("#imgselect").removeAttr('hidden');
-  //var e = document.getElementById("file");
-  //e.type='visible';
+  $("#imgselect").css({'display' : 'block'});
+  $("#go").css({'display' : 'block'});
 }
 
 function gameScreen(){
-  $("#imageselector").hide();
-  $("#img").hide();
-  $("#go").hide();
-  $("#board1").css({'visibility' : 'visible'});
+  $("#imgselect").css({'display' : 'none'});
+  $("#go").css({'display' : 'none'});
+  $("#board1").css({'display' : 'block'});
   $("#selection").css({'visibility' : 'visible'});
+  var element = document.getElementById("title1");
+  element.innerHTML = "CONNECT 4";
+  document.getElementById("title1").style.fontSize = "45px";
+  document.getElementById("title1").style.textAlign = "left";
 
 
   for (var i = 1; i <= 42; i++){
