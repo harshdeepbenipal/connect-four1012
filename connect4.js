@@ -6,7 +6,11 @@ var gameboardArray = [];
         for(let j = 0; j < 6; j++) {
           gameboardArray[i][j] = 0;
       }
-    }            
+    }     
+    
+var player1Turn = true;
+var currentPlayerChip;
+var userImageSrc;
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 playernum  = 1;
@@ -57,9 +61,10 @@ function gameScreen(){
 
   for (var i = 1; i <= 42; i++){
     var newImg = document.createElement("img");
-    $(newImg).attr("id", "chipimg");
+    $(newImg).attr("id", "chipimg" + i);
+    $(newImg).attr("class", "chipimgclass")
     //add a dummy image
-    $(newImg).attr("src", document.querySelector('img').src);
+    $(newImg).attr("src", "./images/white.jpg");
     $("#board1").append(newImg);
 }
 
@@ -72,34 +77,52 @@ function previewFile() {
   reader.addEventListener("load", function () {
     // convert image file to base64 string
     preview.src = reader.result;
+
   }, false);
 
   if (file) {
     reader.readAsDataURL(file);
   }
+  currentPlayerChip = document.querySelector('img').src;
+
 }
 
 
-function addChip(playernum, column) {
+function addChip(column) {
+
+
+
   if (firstFreeRow(column) < 6) {
-    var imgIndex = (6 - firstFreeRow(column))* 7 + 1 + column;
-    gameboardArray[column][firstFreeRow(column)] = playernum; 
+    var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
+    if (player1Turn == true) {
+      gameboardArray[column][firstFreeRow(column)] = 1; 
+    } else {
+      gameboardArray[column][firstFreeRow(column)] = 2; 
+
+    }
   }
-  console.log(gameboardArray[0]);
+  if (player1Turn == true) {
+    currentPlayerChip = document.querySelector('img').src;
+  }
+  document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
+  console.log(gameboardArray);
+  console.log(checkHorizontal());
+  console.log(checkVertical());
+
+  turnSwitch();
 
 }
 
 function firstFreeRow(column) {
 
   for (let i = 0; i < 6; i++) {
-    console.log(gameboardArray[column][i]);
-    if (gameboardArray[column][i] == 0) {
+    if (gameboardArray[parseInt(column)][i] == 0) {
       return i;
     }
   }
 }
 
-function checkHorizontal() {
+function checkVertical() {
   var firstChip;
   var numInRow = 1;
   var lastChip;
@@ -114,13 +137,21 @@ function checkHorizontal() {
       lastChip = gameboardArray[i][j];
 
       if (numInRow == 4) {
-        return lastChip;
+        if (lastChip == 1) {
+          return lastChip + "1 won";
+
+        } 
+        if (lastChip == 2) {
+          return lastChip + "2 won";
+
+        }
       }
     }
   }
+  return "no win h";
 }
 
-function checkVertical() {
+function checkHorizontal() {
   var firstChip;
   var numInRow = 1;
   var lastChip;
@@ -134,10 +165,19 @@ function checkVertical() {
       lastChip = gameboardArray[i][j];
 
       if (numInRow == 4) {
-        return lastChip;
+        if (lastChip == 1) {
+          return lastChip + "1 won";
+
+        }
+        if (lastChip == 2) {
+          return lastChip + "2 won";
+
+        }
       }
     }
   }
+  return "no win v";
+
 }
 
 function checkDiagonalDownRight() {
@@ -165,4 +205,18 @@ function checkDiagonalDownRight() {
     }
   }
   
+}
+
+function turnSwitch() {
+
+  if (player1Turn == true) {
+    currentPlayerChip = "./images/dinov2.png";
+    player1Turn = false;
+  } else {
+    currentPlayerChip = document.querySelector('img').src;
+    player1Turn = true;
+  }
+
+
+
 }

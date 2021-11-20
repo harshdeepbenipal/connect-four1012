@@ -74,7 +74,7 @@ footer{
     width: 640px;
     
 }
-#chipimg{
+.chipimgclass{
     width: 80px;
     height: 80px;
     z-index: 2;
