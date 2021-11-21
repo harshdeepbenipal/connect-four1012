@@ -1,6 +1,5 @@
-//var gameboardArray = new Array[7][6];
-//var imageArray = new Array[7][6];
-var gameboardArray = [];
+
+var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
     for(let i = 0; i < 7; i++) {
         gameboardArray[i] = new Array(6);
         for(let j = 0; j < 6; j++) {
@@ -8,22 +7,23 @@ var gameboardArray = [];
       }
     }     
     
-var player1Turn = true;
-var currentPlayerChip;
+var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
+
+var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var userImageSrc;
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 playernum  = 1;
-function playButton() {
+function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   $("#startButton").css({'display' : 'none'});
   var element = document.getElementById("title1");
   element.innerHTML = "CHOOSE A GAME MODE";
   mode('block');
 }
-function help(){
+function help(){//INSTRUCTION ARE DISPLAYED INSIDE AN ALERT WHEN CLICKED
   alert("Instructions...");
 }
-function mode(b){
+function mode(b){ //YO ADD COMMENTS FOR THESE TWO
   $("#gameMode1").css({'display' : b});
   $("#gameMode2").css({'display': b});
 }
@@ -34,17 +34,17 @@ function gameMode(a){
   }else{
     //alert("Player vs Computer");
   }
-  var element = document.getElementById("title1");
+  var element = document.getElementById("title1"); //CALLS THE DESIGNCHIP FUNCTION
   element.innerHTML = "DESIGN YOUR CHIPS";
   designChip();
 }
-function designChip(){
+function designChip(){ //DESIGN CHIP FUNCTIONALLIYU
   $("#imgselect").css({'display' : 'block'});
   $("#go").css({'display' : 'block'});
 }
 
-function gameScreen(){
-  $("#imgselect").css({'display' : 'none'});
+function gameScreen(){ 
+  $("#imgselect").css({'display' : 'none'});//WHEN LETS GO BUTTON IS CLICKED STARTS UP THE GAMESCREEN
   $("#go").css({'display' : 'none'});
   $("#board1").css({'display' : 'block'});
   $("#selection").css({'visibility' : 'visible'});
@@ -54,7 +54,7 @@ function gameScreen(){
   document.getElementById("title1").style.textAlign = "left";
 
 
-  for (var i = 1; i <= 42; i++){
+  for (var i = 1; i <= 42; i++){ //MAKES IMAGE FOR EVERY HOLE ON THE GAMEBOARD
     var newImg = document.createElement("img");
     $(newImg).attr("id", "chipimg" + i);
     $(newImg).attr("class", "chipimgclass")
@@ -62,9 +62,20 @@ function gameScreen(){
     $(newImg).attr("src", "./images/white.jpg");
     $("#board1").append(newImg);
 }
+for (var i = 0; i <= 6; i++){ //MAKES THE TRANSPARENT BUTTONS ON THE GAMEBOARD TO PLACE CHIPS ON THE EMPTY HOLES IN THE BOARD
+  var newButton = document.createElement("button");
+  $(newButton).attr("id", "column" + i);
+  $(newButton).attr("class", "columnclass")
+  //add a dummy image
+  $(newButton).html(i + 1+ " column");
+  var string = "addChip(i);";
+  $(newButton).attr("onClick", "addChip("+i+");");
+  console.log(i);
+  $("#board1").append(newButton);
 
 }
-function previewFile() {
+}
+function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR THE PLAYER
   const preview = document.querySelector('img');
   const file = document.querySelector('input[type=file]').files[0];
   const reader = new FileReader();
@@ -101,9 +112,24 @@ function addChip(column) {
   }
   document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
   console.log(gameboardArray);
-  console.log(checkHorizontal());
-  console.log(checkVertical());
-
+  if(checkHorizontal() || checkVertical())
+  {
+    $(".columnclass").css({'visibility' : 'hidden'});
+  }
+  var i = 0;
+  var j = 0;
+  var flag = false
+  while(i < 6 && flag == false)
+  {   
+    for (let j = 0; j < 7; j++) { 
+      if(checkDiagonalWin(i, j)[0]){
+        alert(checkDiagonalWin(i, j)[1]+"Player is the winner");
+        $("#selection").css({'visibility' : 'hidden'});
+        flag = true;
+      }
+    }
+    i++;
+  }
   turnSwitch();
 
 }
@@ -133,17 +159,19 @@ function checkVertical() {
 
       if (numInRow == 4) {
         if (lastChip == 1) {
-          return lastChip + "1 won";
-
+          alert("Player 1 has won");
+          return true;
+          
         } 
         if (lastChip == 2) {
-          return lastChip + "2 won";
+          alert("Player 2 has won");
+          return true;
 
         }
       }
     }
   }
-  return "no win h";
+  return false;
 }
 
 function checkHorizontal() {
@@ -161,45 +189,70 @@ function checkHorizontal() {
 
       if (numInRow == 4) {
         if (lastChip == 1) {
-          return lastChip + "1 won";
-
+          alert("Player 1 has won");
+          return true;
         }
         if (lastChip == 2) {
-          return lastChip + "2 won";
-
+          alert("Player 2 has won");
+          return true;
         }
       }
     }
   }
-  return "no win v";
+  return false;
 
 }
 
-function checkDiagonalDownRight() {
-  var firstChip;
-  var numInRow = 1;
-  var lastChip;
-
-
-  var j = 0;
-  for (let i = 4; i > 0; i--) {     //going through each row 
+function checkDiagonalWin(row, column) {
+  var result = false;
+  var player;
+  var numRows = 6;
+  var numColumns = 7;
+  if(gameboardArray[row][column] != 0) {
+      // there are four possible directions of a win
+      // if the top right contains a possible win
+      if(row - 3 > -1 && column + 3 < numColumns) {
+          result = gameboardArray[row][column] == gameboardArray[row - 1][column + 1] &&
+          gameboardArray[row][column] == gameboardArray[row - 2][column + 2] &&
+          gameboardArray[row][column] == gameboardArray[row - 3][column + 3]; 
+          if(result){
+            player = gameboardArray[row][column];
+          }
+        }
       
-    while ( j < 7) {
-    j = j+1
-
-      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
-        numInRow += 1;
-      } else {
-        numInRow = 1;
+      // if the bottom right contains possible win
+      if(row + 3 < numRows  && column + 3 < numColumns) {
+          result = gameboardArray[row][column] == gameboardArray[row + 1][column + 1] &&
+          gameboardArray[row][column] == gameboardArray[row + 2][column + 2] &&
+          gameboardArray[row][column] == gameboardArray[row + 3][column + 3];
+          if(result){
+            player = gameboardArray[row][column];
+          }
+        }
+      
+      // if the bottom left contains possible win
+      if(row + 3 < numRows && column - 3 > -1) {
+          result = gameboardArray[row][column] == gameboardArray[row + 1][column - 1] &&
+          gameboardArray[row][column] == gameboardArray[row + 2][column - 2] &&
+          gameboardArray[row][column] == gameboardArray[row + 3][column - 3]; 
+          if(result){
+            player = gameboardArray[row][column];
+          }
+        }
+      
+      // if the top left contains a possible win
+      if(row - 3 > -1 && column - 3 > -1) {
+          result = gameboardArray[row][column] == gameboardArray[row - 1][column - 1] &&
+          gameboardArray[row][column] == gameboardArray[row - 2][column - 2] &&
+          gameboardArray[row][column] == gameboardArray[row - 3][column - 3]; 
+          if(result){
+            player = gameboardArray[row][column];
+          }
+        }
+      
       }
-      lastChip = gameboardArray[i][j];
 
-      if (numInRow == 4) {
-        return lastChip;
-      }
-    }
-  }
-  
+  return [result,player];
 }
 
 function turnSwitch() {

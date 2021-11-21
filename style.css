@@ -1,6 +1,6 @@
 *{
     font-family: 'Courier New', Courier, monospace;
-    background-color: #498ACC;
+    background-color: #EBE8E7;
 }
 #box {
     /*border: 3px solid black;*/
@@ -59,16 +59,8 @@ footer{
     z-index: 1;
     position: relative;
     height: 480px;
+    overflow: hidden;
     width: 660px;
-}
-#selection{
-    display: inherit;
-    visibility: hidden;
-    text-align: center;
-    align-self: center;
-}
-#add{
-    margin-top: -100px;
 }
 #board{
     align-self: center;
@@ -76,13 +68,16 @@ footer{
     position: absolute;
     height: 480px;
     width: 640px;
+    /*/border-radius: 5%;/*/
 }
 .chipimgclass{
-    width: 80px;
-    height: 80px;
+    width: 73px;
+    height: 73px;
     z-index: 2;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 12px;
+    margin-right: 5px;
+    margin-top: 2px;
+    margin-bottom: 1px;
     border-radius: 50%;
 }
 #go{
@@ -96,4 +91,20 @@ footer{
 }
 .pFile {
     padding: 6px 12px;
+}
+
+.columnclass{
+    width: 88px;
+    height: 990px;
+    margin-right: 2px;
+    margin-left: 1px;
+    background: transparent;
+    z-index: 3;
+    margin-top: -580px;
+    float: center;
+    border: hidden;
+}
+
+.columnclass:hover{
+    opacity: 0.2;
 }
