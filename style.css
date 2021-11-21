@@ -1,6 +1,6 @@
 *{
     font-family: 'Courier New', Courier, monospace;
-    background-color: #EBE8E7;
+    background-color: #699ccf;
 }
 #box {
     /*border: 3px solid black;*/
@@ -88,8 +88,6 @@ footer{
 }
 #imageselector{
     margin: auto;
-}
-.pFile {
     padding: 6px 12px;
 }
 
