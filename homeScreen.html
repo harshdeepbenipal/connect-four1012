@@ -21,8 +21,12 @@
     <p> <button style="display: none;"class = "gmode" id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
   </div>
   <div id="design2">
-    <div style="display:none" id = "imgselect">
-      <input class= "pFile" id="imageselector" type="file" onchange="previewFile()"><br>
+    <div style="display:none" class="imgselect" id = "imgselect1">
+      <input class= "pFile1" id="imageselector" type="file" onchange="previewFile()"><br>
+      <img id= "img" class = "userImage" src="" height="200" alt="Image preview...">
+    </div>
+    <div style="display:none" class="imgselect" id = "imgselect2">
+      <input class= "pFile2"id="imageselector" type="file" onchange="previewFile()"><br>
       <img id= "img" class = "userImage" src="" height="200" alt="Image preview...">
     </div>
   </div>
