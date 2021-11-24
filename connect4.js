@@ -123,11 +123,8 @@ function addChip(column) {
       gameboardArray[column][firstFreeRow(column)] = 2; 
     }
   }
-  if (player1Turn) {
+  if ((player1Turn&&!twoPlayer) || (!player1Turn && twoPlayer)) {
     currentPlayerChip = document.querySelector('img').src;
-  }
-  else if (!player1Turn && twoPlayer){
-    currentPlayerChip = nextPlayer;
   }
   document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
   console.log(gameboardArray);
