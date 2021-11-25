@@ -49,9 +49,8 @@ footer{
 }
 #board1{
     display: inherit;
-    margin-top: auto;
-    margin-left: auto;
-    margin-right: auto;
+    margin: auto;
+    margin-top: 10.5%;
     display:none;
     align-self: center;
     align-content: center;
@@ -83,14 +82,9 @@ footer{
 #go{
     font-size: 35px;
     margin: auto;
-    margin-top: 13%;
+    margin-top: 5%;
     margin-right: 5%;
 }
-#imageselector{
-    margin: auto;
-    padding: 6px 12px;
-}
-
 .columnclass{
     width: 88px;
     height: 990px;
@@ -105,4 +99,14 @@ footer{
 
 .columnclass:hover{
     opacity: 0.2;
+}
+#design1{
+    display: block;
+    margin-top: -8%;
+}
+#design2{
+    display:block;
+    text-align: right;
+    margin-top: -10%;
+    padding-bottom: -50%;
 }
