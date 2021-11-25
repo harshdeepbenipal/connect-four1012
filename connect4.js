@@ -8,11 +8,14 @@ var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
     }     
     
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
-
+var img = 0; 
 var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var twoPlayer;//boolean for game mode
 var nextPlayer;//Image select if two players
 var userImageSrc;
+var img1 = false;
+var img2 = false;
+var firstPlayer;
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 playernum  = 1;
@@ -46,22 +49,26 @@ function gameMode(a){
 function designChip(){ //DESIGN CHIP FUNCTIONALLIYU
   $("#imgselect1").css({'display' : 'block'});
   $("#go").css({'display' : 'block'});
+  $("#radioButtons1").css({'display' : 'block'});
 }
 
 function gameScreen(){ 
   $("#imgselect1").css({'display' : 'none'});//WHEN LETS GO BUTTON IS CLICKED STARTS UP THE GAMESCREEN
   var element = document.getElementById("title1");
+  $("#radioButtons1").css({'display' : 'none'});
   if (amount==2){
     $("#imgselect2").css({'display' : 'block'});
+    $("#radioButtons2").css({'display' : 'block'});
     element.innerHTML = "DESIGN YOUR CHIPS PLAYER 2";
     amount++;
   }else{
+    $("#radioButtons2").css({'display' : 'none'});
     $("#imgselect2").css({'display' : 'none'});
     $("#go").css({'display' : 'none'});
     $("#board1").css({'display' : 'block'});
     $("#selection").css({'visibility' : 'visible'});
     element.innerHTML = "CONNECT 4";
-    document.getElementById("title1").style.fontSize = "45px";
+    document.getElementById("title1").style.fontSize = "33px";
     document.getElementById("title1").style.textAlign = "left";
     for (var i = 1; i <= 42; i++){ //MAKES IMAGE FOR EVERY HOLE ON THE GAMEBOARD
       var newImg = document.createElement("img");
@@ -112,8 +119,17 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
   nextPlayer = document.querySelector('img').src;//This works
   }
 }
-
-
+function submit(k){
+  if (img==0){
+    img1 = true;
+    firstPlayer = "./images/"+k+".png";
+  }
+  img++;
+  if (twoPlayer && img==1){
+    img2 = true;
+    nextPlayer = "./images/"+k+".png";
+  }
+}
 function addChip(column) {
   if (firstFreeRow(column) < 6) {
     var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
@@ -123,8 +139,40 @@ function addChip(column) {
       gameboardArray[column][firstFreeRow(column)] = 2; 
     }
   }
-  if ((player1Turn&&!twoPlayer) || (!player1Turn && twoPlayer)) {
-    currentPlayerChip = document.querySelector('img').src;
+  if(twoPlayer){
+    if(img1 && img2){//Doesn't work, both radio buttons
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
+      } else{
+        currentPlayerChip = nextPlayer;
+      }
+    }else if(img1 && !img2){//Doesn't work, first radio button second insert image
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
+      } else{
+        currentPlayerChip = document.querySelector('img').src;
+      }
+    } else if (!img1 && !img2){//works both inserted
+      if(!player1Turn){
+        currentPlayerChip = document.querySelector('img').src;
+      }
+      else{
+        currentPlayerChip = nextPlayer;
+      }
+    } else if (!img1 && img2){//Doesn't work, first insert image and second radio button
+      if(player1Turn){
+        currentPlayerChip = document.querySelector('img').src;
+      }
+      else{
+        currentPlayerChip = nextPlayer;
+      }
+    }
+  }else{
+    if (player1Turn && !img1) {//works, computer and insert
+      currentPlayerChip = document.querySelector('img').src;
+    } else if (player1Turn && img1){//works, computer and radio buttons
+      currentPlayerChip = firstPlayer;
+    }
   }
   document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
   console.log(gameboardArray);
@@ -276,18 +324,38 @@ function turnSwitch() {
     if (player1Turn) {
       currentPlayerChip = "./images/dinov2.png";
       player1Turn = false;
-    } else {
+    }else if (!player1Turn && !img1){
       currentPlayerChip = document.querySelector('img').src;
+      player1Turn = true;
+    }else{
+      currentPlayerChip = firstPlayer;
       player1Turn = true;
     }
   }else{
-    if (player1Turn) {
-      currentPlayerChip = document.querySelector('img').src;
-      player1Turn = false;
-    }
-    else {
-      currentPlayerChip = nextPlayer;
-      player1Turn = true;
+    if(img1 && img2){
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
+        player1Turn = false;
+      } else{
+        currentPlayerChip = nextPlayer;
+        player1Turn = true;
+      }
+    }else if ((!img1&&!img2)||(!img1 && img2)){
+      if (player1Turn) {
+        currentPlayerChip = document.querySelector('img').src;
+        player1Turn = false;
+      }else {
+        currentPlayerChip = nextPlayer;
+        player1Turn = true;
+      }
+    } else if(img1 && !img2){
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
+        player1Turn = false;
+      } else{
+        currentPlayerChip = document.querySelector('img').src;
+        player1Turn = true;
+      }
     }
   }
 }
