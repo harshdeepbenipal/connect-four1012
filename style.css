@@ -52,7 +52,7 @@ footer{
 #board1{
     display: inherit;
     margin: auto;
-    margin-top: 10.5%;
+    margin-top: -9%;
     display:none;
     align-self: center;
     align-content: center;
@@ -84,7 +84,7 @@ footer{
 #go{
     font-size: 35px;
     margin: auto;
-    margin-top: 5%;
+    margin-top: 2%;
     margin-right: 5%;
 }
 .columnclass{
@@ -104,11 +104,10 @@ footer{
 }
 #design1{
     display: inline;
-    margin-top: -8%;
+    position: fixed;
 }
 #design2{
     display: inline;
     text-align: right;
-    margin-top: -10%;
     padding-bottom: -50%;
 }
