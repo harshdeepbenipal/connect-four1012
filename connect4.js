@@ -9,6 +9,7 @@ var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
     
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
+var choice;
 var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var twoPlayer;//boolean for game mode
 var nextPlayer;//Image select if two players
@@ -49,20 +50,21 @@ function gameMode(a){
 function designChip(){ //DESIGN CHIP FUNCTIONALLIYU
   $("#imgselect1").css({'display' : 'block'});
   $("#go").css({'display' : 'block'});
-  $("#radioButtons1").css({'display' : 'block'});
+  $("#radioButtons").css({'display' : 'block'});
 }
 
 function gameScreen(){ 
   $("#imgselect1").css({'display' : 'none'});//WHEN LETS GO BUTTON IS CLICKED STARTS UP THE GAMESCREEN
   var element = document.getElementById("title1");
-  $("#radioButtons1").css({'display' : 'none'});
   if (amount==2){
+    $('input[name="colour"]').prop('checked', false);
+    img++;
+    $('#'+choice).attr("disabled",true);
     $("#imgselect2").css({'display' : 'block'});
-    $("#radioButtons2").css({'display' : 'block'});
     element.innerHTML = "DESIGN YOUR CHIPS PLAYER 2";
     amount++;
   }else{
-    $("#radioButtons2").css({'display' : 'none'});
+    $("#radioButtons").css({'display' : 'none'});
     $("#imgselect2").css({'display' : 'none'});
     $("#go").css({'display' : 'none'});
     $("#board1").css({'display' : 'block'});
@@ -120,11 +122,11 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
   }
 }
 function submit(k){
+  choice = k;
   if (img==0){
     img1 = true;
     firstPlayer = "./images/"+k+".png";
   }
-  img++;
   if (twoPlayer && img==1){
     img2 = true;
     nextPlayer = "./images/"+k+".png";
@@ -140,26 +142,26 @@ function addChip(column) {
     }
   }
   if(twoPlayer){
-    if(img1 && img2){//Doesn't work, both radio buttons
+    if(img1 && img2){//Both radio buttons
       if (player1Turn){
         currentPlayerChip = firstPlayer;
       } else{
         currentPlayerChip = nextPlayer;
       }
-    }else if(img1 && !img2){//Doesn't work, first radio button second insert image
+    }else if(img1 && !img2){//First radio button second insert image
       if (player1Turn){
         currentPlayerChip = firstPlayer;
       } else{
         currentPlayerChip = document.querySelector('img').src;
       }
-    } else if (!img1 && !img2){//works both inserted
+    } else if (!img1 && !img2){//Both inserted
       if(!player1Turn){
         currentPlayerChip = document.querySelector('img').src;
       }
       else{
         currentPlayerChip = nextPlayer;
       }
-    } else if (!img1 && img2){//Doesn't work, first insert image and second radio button
+    } else if (!img1 && img2){//First insert image and second radio button
       if(player1Turn){
         currentPlayerChip = document.querySelector('img').src;
       }
@@ -168,9 +170,9 @@ function addChip(column) {
       }
     }
   }else{
-    if (player1Turn && !img1) {//works, computer and insert
+    if (player1Turn && !img1) {//Computer and insert
       currentPlayerChip = document.querySelector('img').src;
-    } else if (player1Turn && img1){//works, computer and radio buttons
+    } else if (player1Turn && img1){//Computer and radio buttons
       currentPlayerChip = firstPlayer;
     }
   }
