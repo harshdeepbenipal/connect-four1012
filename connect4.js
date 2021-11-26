@@ -186,8 +186,8 @@ function addChip(column) {
   while(i < 6 && flag == false)
   {   
     for (let j = 0; j < 7; j++) { 
-      if(checkDiagonalWin(i, j)[0]){
-        alert(checkDiagonalWin(i, j)[1]+"Player is the winner");
+      if(checkDiagonal(i, j)[0]){
+        alert(checkDiagonal(i, j)[1]+"Player is the winner");
         $("#selection").css({'visibility' : 'hidden'});
         flag = true;
       }
@@ -267,7 +267,7 @@ function checkHorizontal() {
 
 }
 
-function checkDiagonalWin(row, column) {
+function checkDiagonal(row, column) {
   var result = false;
   var player;
   var numRows = 6;
