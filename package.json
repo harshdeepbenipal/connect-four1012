@@ -1,8 +1,10 @@
 {
   "dependencies": {
+    "dom": "^0.0.3",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
-    "jsdom": "^18.1.1"
+    "jsdom": "^18.1.1",
+    "query-selector": "^2.0.0"
   },
   "name": "connect-four1012",
   "description": "Team Name: BBC-Big Brain Coders",

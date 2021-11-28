@@ -1,3 +1,4 @@
+
 var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
     for(let i = 0; i < 7; i++) {
         gameboardArray[i] = new Array(6);
@@ -23,68 +24,58 @@ playernum  = 1;
 amount = 1;
 var express = require('express');
 var app = express();
-var jsdom = require('jsdom');
-var dom = new JSDOM(html);
-var idCounter = 0;
+
 
 app.post('/post', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
-    console.log("New express client");
-    console.log("Received: ");
-    console.log(JSON.parse(req.query['data']));
+    console.log("New express client      Received: " + JSON.parse(req.query['data']));
     var z = JSON.parse(req.query['data']);
-
     // check if the request action is generateCode
-    console.log(z['action']);
     if (z['action'] == "addChip") {
-        var jsontext = JSON.stringify({
-            'action': 'addChip',
-            'msg': 'New code generated!!!'
-        });
-        console.log(jsontext);
         var column = z['column'];
-        tempDocument = z['document'];
-        const { window } = new JSDOM(tempDocument);
-        const { document } = (new JSDOM('')).window;
-        console.log(document);
-        addChip(column);
-        console.log("addChip");
+        var playerTurn = z['playerTurn'];
+        document = z['document'];
+        imgIndex = addChip(column, playerTurn);
+
+        var jsontext = JSON.stringify({
+          'action': 'addChip',
+          'imgIndex': imgIndex
+      });
         // send the response while including the JSON text		
         /*TODO 2 ... send the response including the JSON text*/
-
         res.send(jsontext);
-    } else if (z['action'] == "evaluate") {
-        //evaluate the attempt_code for this user
-        var [num_match, num_containing, num_not_in]
-            = evaluate(codes[z['name']], z['attempt_code']);
+    } if(z['action'] == "checkWin"){
+      var winner = 0;
+      //console.log("Horizontal: " + checkHorizontal());
+      //console.log("Vertical: " + checkVertical());
 
-        var answer = [];
-        if ((num_match == code_length) || (num_attempts == z["current_attempt_id"]))
-            answer = codes[z['name']];
-
-        var win = false;
-        if (num_match == code_length) win = true;
-
-        /* the response will have 6 parts: request action, whether won or not, number of exact matches,
-        number of colors that are correct, number of wrong colors, and the answer if the game ended */
-        var jsontext = JSON.stringify({
-            /*TODO 3 ... type of action */
-            'action' : 'evaluate',
-            /*TODO 4 ... won or not */
-            'win' : win,
-            /*TODO 5 ... number of match*/
-            'num_match' : num_match,
-            /*TODO 6 ... number of correct colors*/
-            'num_containing' : num_containing,
-            /*TODO 7 ... number of wrong colors*/
-            'num_not_in' : num_not_in,
-            /*TODO 8 ... the answer code when the game ends*/
-            'code' : answer,
-        });
-        console.log(jsontext);
-        res.send(jsontext);
-    } else {
-        res.send(JSON.stringify({ 'msg': 'error!!!' }));
+      if (checkHorizontal() != 0){
+        winner = checkHorizontal();
+      } else if (checkVertical() != 0) {
+        winner = checkVertical();
+      } 
+      var i = 0;
+      var j = 0;
+      var flag = false
+      while(i < 6 && flag == false)
+      {   
+        for (let j = 0; j < 7; j++) { 
+          if(checkDiagonal(i, j)[0]){
+            flag = true;
+            winner = checkDiagonal(i, j)[1];
+          }
+        }
+        i++;
+      }
+      //console.log(winner);
+      var jsontext = JSON.stringify({
+         'action': 'checkWin',
+        'winner': winner
+    });
+    console.log("return")
+      res.send(jsontext);
+    } if(z['action'] == "resetGame"){
+        resetBoard();
     }
 }).listen(3000);
 console.log("Server is running!");
@@ -99,71 +90,22 @@ function submit(k){
     nextPlayer = "./images/"+k+".png";
   }
 }
-function addChip(column) {
+function addChip(column, playerTurn) {
+  console.log(document);
   if (firstFreeRow(column) < 6) {
     var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
-    if (player1Turn == true) {
+    if (playerTurn == 1) {
       gameboardArray[column][firstFreeRow(column)] = 1; 
     } else {
       gameboardArray[column][firstFreeRow(column)] = 2; 
     }
   }
-  if(twoPlayer){
-    if(img1 && img2){//Both radio buttons
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-      } else{
-        currentPlayerChip = nextPlayer;
-      }
-    }else if(img1 && !img2){//First radio button second insert image
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-      } else{
-        currentPlayerChip = document.querySelector('img').src;
-      }
-    } else if (!img1 && !img2){//Both inserted
-      if(!player1Turn){
-        currentPlayerChip = document.querySelector('img').src;
-      }
-      else{
-        currentPlayerChip = nextPlayer;
-      }
-    } else if (!img1 && img2){//First insert image and second radio button
-      if(player1Turn){
-        currentPlayerChip = document.querySelector('img').src;
-      }
-      else{
-        currentPlayerChip = nextPlayer;
-      }
-    }
-  }else{
-    if (player1Turn && !img1) {//Computer and insert
-      currentPlayerChip = document.querySelector('img').src;
-    } else if (player1Turn && img1){//Computer and radio buttons
-      currentPlayerChip = firstPlayer;
-    }
-  }
-  document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
+  console.log(gameboardArray[0]);
+
+
   console.log(gameboardArray);
-  if(checkHorizontal() || checkVertical())
-  {
-    $(".columnclass").css({'visibility' : 'hidden'});
-  }
-  var i = 0;
-  var j = 0;
-  var flag = false
-  while(i < 6 && flag == false)
-  {   
-    for (let j = 0; j < 7; j++) { 
-      if(checkDiagonal(i, j)[0]){
-        alert(checkDiagonal(i, j)[1]+"Player is the winner");
-        $("#selection").css({'visibility' : 'hidden'});
-        flag = true;
-      }
-    }
-    i++;
-  }
-  turnSwitch();
+ 
+  return imgIndex
 
 }
 
@@ -192,19 +134,19 @@ function checkVertical() {
 
       if (numInRow == 4) {
         if (lastChip == 1) {
-          alert("Player 1 has won");
-          return true;
+          //alert("Player 1 has won");
+          return 1;
           
         } 
         if (lastChip == 2) {
-          alert("Player 2 has won");
-          return true;
+          //alert("Player 2 has won");
+          return 2;
 
         }
       }
     }
   }
-  return false;
+  return 0;
 }
 
 function checkHorizontal() {
@@ -222,17 +164,17 @@ function checkHorizontal() {
 
       if (numInRow == 4) {
         if (lastChip == 1) {
-          alert("Player 1 has won");
-          return true;
+          //alert("Player 1 has won");
+          return 1;
         }
         if (lastChip == 2) {
-          alert("Player 2 has won");
-          return true;
+          //alert("Player 2 has won");
+          return 2;
         }
       }
     }
   }
-  return false;
+  return 0;
 
 }
 
@@ -282,49 +224,16 @@ function checkDiagonal(row, column) {
             player = gameboardArray[row][column];
           }
         }
-      
       }
 
   return [result,player];
 }
 
-function turnSwitch() {
-  if(!twoPlayer){
-    if (player1Turn) {
-      currentPlayerChip = "./images/dinov2.png";
-      player1Turn = false;
-    }else if (!player1Turn && !img1){
-      currentPlayerChip = document.querySelector('img').src;
-      player1Turn = true;
-    }else{
-      currentPlayerChip = firstPlayer;
-      player1Turn = true;
-    }
-  }else{
-    if(img1 && img2){
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-        player1Turn = false;
-      } else{
-        currentPlayerChip = nextPlayer;
-        player1Turn = true;
-      }
-    }else if ((!img1&&!img2)||(!img1 && img2)){
-      if (player1Turn) {
-        currentPlayerChip = document.querySelector('img').src;
-        player1Turn = false;
-      }else {
-        currentPlayerChip = nextPlayer;
-        player1Turn = true;
-      }
-    } else if(img1 && !img2){
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-        player1Turn = false;
-      } else{
-        currentPlayerChip = document.querySelector('img').src;
-        player1Turn = true;
-      }
-    }
+
+function resetBoard(){
+  for(let i = 0; i < 7; i++) {
+    for(let j = 0; j < 6; j++) {
+      gameboardArray[i][j] = 0;
   }
+}
 }

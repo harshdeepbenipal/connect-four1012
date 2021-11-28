@@ -5,7 +5,7 @@ var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
         for(let j = 0; j < 6; j++) {
           gameboardArray[i][j] = 0;
       }
-    }     
+    }
     
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
@@ -17,6 +17,7 @@ var userImageSrc;
 var img1 = false;
 var img2 = false;
 var firstPlayer;
+var imgIndex = 0;
 var url = "http://localhost:3000/post";
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
@@ -89,7 +90,6 @@ function gameScreen(){
       $(newButton).html(i + 1+ " column");
       var string = "addChip(i);";
       $(newButton).attr("onClick", "addChip("+i+");");
-      console.log(i);
       $("#board1").append(newButton);
     }
   }
@@ -134,138 +134,84 @@ function submit(k){
   }
 }
 function addChip(column) {
-  console.log(document);
-   $.post(
-      url+'?data='+JSON.stringify({
-        'column': column,
-        'action': 'addChip',
-        'document': document
-      }),
-      response
-   );
+  imgIndex = 0;
+  if (player1Turn) {
+    playerTurn = 1;
+  } else{
+    playerTurn = 2;
   }
-
-function firstFreeRow(column) {
-
-  for (let i = 0; i < 6; i++) {
-    if (gameboardArray[parseInt(column)][i] == 0) {
-      return i;
-    }
+  if (twoPlayer) {
+    var numPlayers = 2;
+  } else {
+    var numPlayers = 1;
   }
+  $.post(
+    url+'?data='+JSON.stringify({
+      'column': column,
+      'action': 'addChip',
+      'playerTurn' : playerTurn,
+      'document': document,
+      'twoplayers' : numPlayers
+    }),
+    response);
+  }
+function checkWin() {
+  $.post(
+    url+'?data='+JSON.stringify({
+      'action': 'checkWin',
+    }),
+    response);
 }
 
-function checkVertical() {
-  var firstChip;
-  var numInRow = 1;
-  var lastChip;
-  for (let i = 0; i < 6; i++) {     //going through each row 
-    for (let j = 0; j < 7; j++) { 
-
-      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
-        numInRow += 1;
-      } else {
-        numInRow = 1;
-      }
-      lastChip = gameboardArray[i][j];
-
-      if (numInRow == 4) {
-        if (lastChip == 1) {
-          alert("Player 1 has won");
-          return true;
-          
-        } 
-        if (lastChip == 2) {
-          alert("Player 2 has won");
-          return true;
-
-        }
-      }
-    }
-  }
-  return false;
+function resetBoard() {
+  $.post(
+    url+'?data='+JSON.stringify({
+      'action': 'resetBoard',
+    }),
+    response);
 }
+function iconChange(indexOfImg) {
+  if(twoPlayer){
+    if(img1 && img2){//Both radio buttons
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
 
-function checkHorizontal() {
-  var firstChip;
-  var numInRow = 1;
-  var lastChip;
-  for (let j = 0; j < 7; j++) {     //going through each column 
-    for (let i = 0; i < 6; i++) { 
-      if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
-        numInRow += 1;
-      } else {
-        numInRow = 1;
+      } else{
+        currentPlayerChip = nextPlayer;
       }
-      lastChip = gameboardArray[i][j];
+    }else if(img1 && !img2){//First radio button second insert image
 
-      if (numInRow == 4) {
-        if (lastChip == 1) {
-          alert("Player 1 has won");
-          return true;
-        }
-        if (lastChip == 2) {
-          alert("Player 2 has won");
-          return true;
-        }
+      if (player1Turn){
+        currentPlayerChip = firstPlayer;
+      } else{
+        currentPlayerChip = document.querySelector('img').src;
+      }
+    } else if (!img1 && !img2){//Both inserted
+      if(!player1Turn){
+        currentPlayerChip = document.querySelector('img').src;
+      }
+      else{
+        currentPlayerChip = nextPlayer;
+      }
+    } else if (!img1 && img2){//First insert image and second radio button
+
+      if(player1Turn){
+        currentPlayerChip = document.querySelector('img').src;
+      }
+      else{
+        currentPlayerChip = nextPlayer;
       }
     }
+  }else{
+    if (player1Turn && !img1) {//Computer and insert
+      currentPlayerChip = document.querySelector('img').src;
+    } else if (player1Turn && img1){//Computer and radio buttons
+      currentPlayerChip = firstPlayer;
+    }
   }
-  return false;
 
+  document.getElementById("chipimg" + indexOfImg).setAttribute('src', currentPlayerChip);
 }
-
-function checkDiagonal(row, column) {
-  var result = false;
-  var player;
-  var numRows = 6;
-  var numColumns = 7;
-  if(gameboardArray[row][column] != 0) {
-      // there are four possible directions of a win
-      // if the top right contains a possible win
-      if(row - 3 > -1 && column + 3 < numColumns) {
-          result = gameboardArray[row][column] == gameboardArray[row - 1][column + 1] &&
-          gameboardArray[row][column] == gameboardArray[row - 2][column + 2] &&
-          gameboardArray[row][column] == gameboardArray[row - 3][column + 3]; 
-          if(result){
-            player = gameboardArray[row][column];
-          }
-        }
-      
-      // if the bottom right contains possible win
-      if(row + 3 < numRows  && column + 3 < numColumns) {
-          result = gameboardArray[row][column] == gameboardArray[row + 1][column + 1] &&
-          gameboardArray[row][column] == gameboardArray[row + 2][column + 2] &&
-          gameboardArray[row][column] == gameboardArray[row + 3][column + 3];
-          if(result){
-            player = gameboardArray[row][column];
-          }
-        }
-      
-      // if the bottom left contains possible win
-      if(row + 3 < numRows && column - 3 > -1) {
-          result = gameboardArray[row][column] == gameboardArray[row + 1][column - 1] &&
-          gameboardArray[row][column] == gameboardArray[row + 2][column - 2] &&
-          gameboardArray[row][column] == gameboardArray[row + 3][column - 3]; 
-          if(result){
-            player = gameboardArray[row][column];
-          }
-        }
-      
-      // if the top left contains a possible win
-      if(row - 3 > -1 && column - 3 > -1) {
-          result = gameboardArray[row][column] == gameboardArray[row - 1][column - 1] &&
-          gameboardArray[row][column] == gameboardArray[row - 2][column - 2] &&
-          gameboardArray[row][column] == gameboardArray[row - 3][column - 3]; 
-          if(result){
-            player = gameboardArray[row][column];
-          }
-        }
-      
-      }
-
-  return [result,player];
-}
-
 function turnSwitch() {
   if(!twoPlayer){
     if (player1Turn) {
@@ -307,10 +253,37 @@ function turnSwitch() {
   }
 }
 
+
 function response(data,status){
   var response = JSON.parse(data);
-  console.log(data);
+  console.log(response['action']);
     if (response['action'] == 'addChip'){
-        
-    } 
+      imgIndex = parseInt(response['imgIndex']);
+      iconChange(imgIndex);
+      turnSwitch();
+      checkWin();
+    }
+    if (response['action'] == 'checkWin'){
+      winner = parseInt(response['winner']);
+      console.log(winner);
+      if (winner != 0) {
+        resetBoard();
+        if (winner == 1) {
+          var confirmButton = confirm("P1 is Winner, would you like to play again")
+          $(".columnclass").css({'visibility' : 'hidden'});
+        } else if (winner == 2) {
+          var confirmButton = confirm("P2 is Winner, would you like to play again")
+          $(".columnclass").css({'visibility' : 'hidden'});
+        }
+      }
+      if (confirmButton) {
+        console.log("confirmed");
+        resetGame();
+        $(".columnclass").css({'visibility' : 'visible'});
+        ($.chipimgclass).attr("src", "./images/white.jpg");
+
+      } else if (!confirmButton) {
+        window.open('','_self').close();
+      }
+    }
 }
