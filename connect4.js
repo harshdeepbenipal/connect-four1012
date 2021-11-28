@@ -17,6 +17,7 @@ var userImageSrc;
 var img1 = false;
 var img2 = false;
 var firstPlayer;
+var url = "http://localhost:3000/post";
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 playernum  = 1;
@@ -133,72 +134,16 @@ function submit(k){
   }
 }
 function addChip(column) {
-  if (firstFreeRow(column) < 6) {
-    var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
-    if (player1Turn == true) {
-      gameboardArray[column][firstFreeRow(column)] = 1; 
-    } else {
-      gameboardArray[column][firstFreeRow(column)] = 2; 
-    }
+  console.log(document);
+   $.post(
+      url+'?data='+JSON.stringify({
+        'column': column,
+        'action': 'addChip',
+        'document': document
+      }),
+      response
+   );
   }
-  if(twoPlayer){
-    if(img1 && img2){//Both radio buttons
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-      } else{
-        currentPlayerChip = nextPlayer;
-      }
-    }else if(img1 && !img2){//First radio button second insert image
-      if (player1Turn){
-        currentPlayerChip = firstPlayer;
-      } else{
-        currentPlayerChip = document.querySelector('img').src;
-      }
-    } else if (!img1 && !img2){//Both inserted
-      if(!player1Turn){
-        currentPlayerChip = document.querySelector('img').src;
-      }
-      else{
-        currentPlayerChip = nextPlayer;
-      }
-    } else if (!img1 && img2){//First insert image and second radio button
-      if(player1Turn){
-        currentPlayerChip = document.querySelector('img').src;
-      }
-      else{
-        currentPlayerChip = nextPlayer;
-      }
-    }
-  }else{
-    if (player1Turn && !img1) {//Computer and insert
-      currentPlayerChip = document.querySelector('img').src;
-    } else if (player1Turn && img1){//Computer and radio buttons
-      currentPlayerChip = firstPlayer;
-    }
-  }
-  document.getElementById("chipimg" + imgIndex).setAttribute('src', currentPlayerChip);
-  console.log(gameboardArray);
-  if(checkHorizontal() || checkVertical())
-  {
-    $(".columnclass").css({'visibility' : 'hidden'});
-  }
-  var i = 0;
-  var j = 0;
-  var flag = false
-  while(i < 6 && flag == false)
-  {   
-    for (let j = 0; j < 7; j++) { 
-      if(checkDiagonal(i, j)[0]){
-        alert(checkDiagonal(i, j)[1]+"Player is the winner");
-        $("#selection").css({'visibility' : 'hidden'});
-        flag = true;
-      }
-    }
-    i++;
-  }
-  turnSwitch();
-
-}
 
 function firstFreeRow(column) {
 
@@ -360,4 +305,12 @@ function turnSwitch() {
       }
     }
   }
+}
+
+function response(data,status){
+  var response = JSON.parse(data);
+  console.log(data);
+    if (response['action'] == 'addChip'){
+        
+    } 
 }
