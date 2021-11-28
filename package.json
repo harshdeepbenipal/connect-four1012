@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "dom": "^0.0.3",
+    "express": "^4.17.1",
+    "jquery": "^3.6.0",
+    "jsdom": "^18.1.1",
+    "query-selector": "^2.0.0"
+  },
+  "name": "connect-four1012",
+  "description": "Team Name: BBC-Big Brain Coders",
+  "version": "1.0.0",
+  "main": "connect4.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingluufy/connect-four1012.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kingluufy/connect-four1012/issues"
+  },
+  "homepage": "https://github.com/kingluufy/connect-four1012#readme"
+}
