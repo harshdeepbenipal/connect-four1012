@@ -19,6 +19,9 @@ app.post('/post', (req, res) => {
         var playerTurn = z['playerTurn'];
         document = z['document'];
         console.log(playerTurn);
+        if(playerTurn == 3){
+          column = Math.floor(Math.random()*6);
+        }
         imgIndex = addChip(column, playerTurn);
         var jsontext = JSON.stringify({
           'action': 'addChip',
@@ -28,18 +31,6 @@ app.post('/post', (req, res) => {
         /*TODO 2 ... send the response including the JSON text*/
         res.send(jsontext);
     } 
-    if(z['action'] == "computerTurn"){
-      console.log(playerTurn);
-      column = Math.floor(Math.random()*6);
-      imgIndex = computerTurn(column, playerTurn);
-      var jsontext = JSON.stringify({
-        'action': 'computerTurn',
-        'imgIndex': imgIndex
-    });
-      // send the response while including the JSON text		
-      /*TODO 2 ... send the response including the JSON text*/
-      res.send(jsontext);
-    }
     if(z['action'] == "checkWin"){
       winner = 0;
       console.log(gameboardArray);
@@ -79,7 +70,6 @@ app.post('/post', (req, res) => {
     }
 }).listen(3000);
 console.log("Server is running!");
-
 function addChip(column, playerTurn) {
   if (firstFreeRow(column) < 6) {
     var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
@@ -91,18 +81,6 @@ function addChip(column, playerTurn) {
   }
   return imgIndex
 }
-function computerTurn(column, playerTurn){
-  if (firstFreeRow(column) < 6) {
-    var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
-    if (playerTurn == 1) {
-      gameboardArray[column][firstFreeRow(column)] = 1; 
-    } else {
-      gameboardArray[column][firstFreeRow(column)] = 2; 
-    }
-  }
-  return imgIndex
-}
-return imgIndex
 function firstFreeRow(column) {
   for (let i = 0; i < 6; i++) {
     if (gameboardArray[parseInt(column)][i] == 0) {

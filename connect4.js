@@ -251,7 +251,7 @@ function turnSwitch() {
 }
 function response(data,status){
   var response = JSON.parse(data);
-    if (response['action'] == 'addChip' || response['action'] == 'computerTurn'){
+    if (response['action'] == 'addChip'){
       imgIndex = parseInt(response['imgIndex']);
       var won = false;
       iconChange(imgIndex);
@@ -259,14 +259,10 @@ function response(data,status){
       checkWin();
       console.log(twoPlayer);
       console.log(playerTurn);
-      if (response['action'] == "addChip") {
-        $.post(
-          url+'?data='+JSON.stringify({
-            'action': 'computerTurn',
-          }),
-          response);
-        }
-      
+      if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {
+        console.log("computer");
+        addChip();
+      }
     }
     if (response['action'] == 'checkWin'){
       winner = parseInt(response['winner']);
@@ -289,7 +285,6 @@ function response(data,status){
       if(!confirmButton){
         resetGame();
       }
-      playerTurn = 1;
       }
     }
 }
