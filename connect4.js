@@ -1,7 +1,7 @@
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
 var choice;
-var winner;
+var winner = 0;
 var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var twoPlayer;//boolean for game mode
 var nextPlayer;//Image select if two players
@@ -134,10 +134,8 @@ function addChip(column) {
   } else{
     playerTurn = 2;
   }
-  if (twoPlayer) {
-    var numPlayers = 2;
-  } else {
-    numPlayers = 1;
+  if (!twoPlayer && playerTurn == 2) {
+    playerTurn = 3;
   }
   $.post(
     url+'?data='+JSON.stringify({
@@ -145,7 +143,7 @@ function addChip(column) {
       'action': 'addChip',
       'playerTurn' : playerTurn,
       'document': document,
-      'twoplayers' : numPlayers
+      
     }),
     response);
   }
@@ -253,17 +251,29 @@ function turnSwitch() {
 }
 function response(data,status){
   var response = JSON.parse(data);
-  console.log(response['action']);
-    if (response['action'] == 'addChip'){
+    if (response['action'] == 'addChip' || response['action'] == 'computerTurn'){
       imgIndex = parseInt(response['imgIndex']);
+      var won = false;
       iconChange(imgIndex);
       turnSwitch();
       checkWin();
+      console.log(twoPlayer);
+      console.log(playerTurn);
+      if (response['action'] == "addChip") {
+        $.post(
+          url+'?data='+JSON.stringify({
+            'action': 'computerTurn',
+          }),
+          response);
+        }
+      
     }
     if (response['action'] == 'checkWin'){
       winner = parseInt(response['winner']);
       console.log(winner);
       if (winner != 0) {
+        console.log("flag");
+        won = true;
         resetBoard();
         if (winner == 1) {
             var confirmButton = confirm("P1 is the Winner, would you like to play again?")
@@ -276,12 +286,10 @@ function response(data,status){
             }
          //$(".columnclass").css({'visibility' : 'hidden'});
         }
-        if (confirmButton) {
-            console.log("confirmed");
-            resetBoard();
-          }else if (!confirmButton) {
-            resetGame();
-          }
+      if(!confirmButton){
+        resetGame();
+      }
+      playerTurn = 1;
       }
     }
 }
