@@ -4,6 +4,7 @@
     "express": "^4.17.1",
     "jquery": "^3.6.0",
     "jsdom": "^18.1.1",
+    "nodemon": "^2.0.15",
     "query-selector": "^2.0.0"
   },
   "name": "connect-four1012",

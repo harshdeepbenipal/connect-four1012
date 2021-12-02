@@ -1,27 +1,10 @@
-
-var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
-    for(let i = 0; i < 7; i++) {
-        gameboardArray[i] = new Array(6);
-        for(let j = 0; j < 6; j++) {
-          gameboardArray[i][j] = 0;
-      }
-    }     
-    
-var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
-var img = 0; 
-var choice;
-var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
-var twoPlayer;//boolean for game mode
-var nextPlayer;//Image select if two players
-var userImageSrc;
-var img1 = false;
-var img2 = false;
-var firstPlayer;
+var gameboardArray;    
+var imgIndex;
+var winner;  
 var document;
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
-playernum  = 1;
-amount = 1;
+board(); 
 var express = require('express');
 var app = express();
 
@@ -36,7 +19,6 @@ app.post('/post', (req, res) => {
         var playerTurn = z['playerTurn'];
         document = z['document'];
         imgIndex = addChip(column, playerTurn);
-
         var jsontext = JSON.stringify({
           'action': 'addChip',
           'imgIndex': imgIndex
@@ -44,11 +26,11 @@ app.post('/post', (req, res) => {
         // send the response while including the JSON text		
         /*TODO 2 ... send the response including the JSON text*/
         res.send(jsontext);
-    } if(z['action'] == "checkWin"){
-      var winner = 0;
+    } 
+    if(z['action'] == "checkWin"){
+      winner = 0;
       //console.log("Horizontal: " + checkHorizontal());
       //console.log("Vertical: " + checkVertical());
-
       if (checkHorizontal() != 0){
         winner = checkHorizontal();
       } else if (checkVertical() != 0) {
@@ -74,22 +56,15 @@ app.post('/post', (req, res) => {
     });
     console.log("return")
       res.send(jsontext);
-    } if(z['action'] == "resetGame"){
-        resetBoard();
+    } 
+    if(z['action'] == "resetGame"){
+        board();
+    }
+    if(z['action'] == "resetWinner"){
+      winner = 0;
     }
 }).listen(3000);
 console.log("Server is running!");
-function submit(k){
-  choice = k;
-  if (img==0){
-    img1 = true;
-    firstPlayer = "./images/"+k+".png";
-  }
-  if (twoPlayer && img==1){
-    img2 = true;
-    nextPlayer = "./images/"+k+".png";
-  }
-}
 function addChip(column, playerTurn) {
   console.log(document);
   if (firstFreeRow(column) < 6) {
@@ -101,54 +76,42 @@ function addChip(column, playerTurn) {
     }
   }
   console.log(gameboardArray[0]);
-
-
   console.log(gameboardArray);
- 
   return imgIndex
-
 }
-
 function firstFreeRow(column) {
-
   for (let i = 0; i < 6; i++) {
     if (gameboardArray[parseInt(column)][i] == 0) {
       return i;
     }
   }
 }
-
 function checkVertical() {
   var firstChip;
   var numInRow = 1;
   var lastChip;
   for (let i = 0; i < 6; i++) {     //going through each row 
     for (let j = 0; j < 7; j++) { 
-
       if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
         numInRow += 1;
       } else {
         numInRow = 1;
       }
       lastChip = gameboardArray[i][j];
-
       if (numInRow == 4) {
         if (lastChip == 1) {
           //alert("Player 1 has won");
           return 1;
-          
         } 
         if (lastChip == 2) {
           //alert("Player 2 has won");
           return 2;
-
         }
       }
     }
   }
   return 0;
 }
-
 function checkHorizontal() {
   var firstChip;
   var numInRow = 1;
@@ -175,9 +138,7 @@ function checkHorizontal() {
     }
   }
   return 0;
-
 }
-
 function checkDiagonal(row, column) {
   var result = false;
   var player;
@@ -194,7 +155,6 @@ function checkDiagonal(row, column) {
             player = gameboardArray[row][column];
           }
         }
-      
       // if the bottom right contains possible win
       if(row + 3 < numRows  && column + 3 < numColumns) {
           result = gameboardArray[row][column] == gameboardArray[row + 1][column + 1] &&
@@ -204,7 +164,6 @@ function checkDiagonal(row, column) {
             player = gameboardArray[row][column];
           }
         }
-      
       // if the bottom left contains possible win
       if(row + 3 < numRows && column - 3 > -1) {
           result = gameboardArray[row][column] == gameboardArray[row + 1][column - 1] &&
@@ -214,7 +173,6 @@ function checkDiagonal(row, column) {
             player = gameboardArray[row][column];
           }
         }
-      
       // if the top left contains a possible win
       if(row - 3 > -1 && column - 3 > -1) {
           result = gameboardArray[row][column] == gameboardArray[row - 1][column - 1] &&
@@ -225,15 +183,14 @@ function checkDiagonal(row, column) {
           }
         }
       }
-
   return [result,player];
 }
-
-
-function resetBoard(){
+function board(){
+  gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
   for(let i = 0; i < 7; i++) {
+    gameboardArray[i] = new Array(6);
     for(let j = 0; j < 6; j++) {
       gameboardArray[i][j] = 0;
-  }
-}
+    }
+  }     
 }

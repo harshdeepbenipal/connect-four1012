@@ -1,15 +1,7 @@
-
-var gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
-    for(let i = 0; i < 7; i++) {
-        gameboardArray[i] = new Array(6);
-        for(let j = 0; j < 6; j++) {
-          gameboardArray[i][j] = 0;
-      }
-    }
-    
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
 var choice;
+var winner;
 var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var twoPlayer;//boolean for game mode
 var nextPlayer;//Image select if two players
@@ -21,8 +13,8 @@ var imgIndex = 0;
 var url = "http://localhost:3000/post";
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
-playernum  = 1;
-amount = 1;
+var playernum  = 1;
+var amount = 1;
 function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   $("#startButton").css({'display' : 'none'});
   var element = document.getElementById("title1");
@@ -30,7 +22,7 @@ function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   mode('block');
 }
 function help(){//INSTRUCTION ARE DISPLAYED INSIDE AN ALERT WHEN CLICKED
-  alert("Instructions...");
+    alert("INSTRUCTIONS\n\nStart off by choosing a game mode of multiplayer or against the computer, which directs you to design your chip(s).In order to design your chips choose one of the options provided or input an image to set as a chip. The objective is to click on the columns of the board and connect 4 chips either vertically, horizontally or diagonally.");
 }
 function mode(b){ //YO ADD COMMENTS FOR THESE TWO
   $("#gameMode1").css({'display' : b});
@@ -39,6 +31,7 @@ function mode(b){ //YO ADD COMMENTS FOR THESE TWO
 function gameMode(a){
   mode('none');
   var element = document.getElementById("title1");
+  $('#go').attr("disabled",true);
   if (a){
     amount++;
     twoPlayer = true;
@@ -54,12 +47,12 @@ function designChip(){ //DESIGN CHIP FUNCTIONALLIYU
   $("#go").css({'display' : 'block'});
   $("#radioButtons").css({'display' : 'block'});
 }
-
 function gameScreen(){ 
   $("#imgselect1").css({'display' : 'none'});//WHEN LETS GO BUTTON IS CLICKED STARTS UP THE GAMESCREEN
   var element = document.getElementById("title1");
   if (amount==2){
     $('input[name="colour"]').prop('checked', false);
+    $('#go').attr("disabled",true);
     img++;
     $('#'+choice).attr("disabled",true);
     $("#imgselect2").css({'display' : 'block'});
@@ -73,7 +66,6 @@ function gameScreen(){
     $("#selection").css({'visibility' : 'visible'});
     element.innerHTML = "CONNECT 4";
     document.getElementById("title1").style.fontSize = "33px";
-    document.getElementById("title1").style.textAlign = "left";
     for (var i = 1; i <= 42; i++){ //MAKES IMAGE FOR EVERY HOLE ON THE GAMEBOARD
       var newImg = document.createElement("img");
       $(newImg).attr("id", "chipimg" + i);
@@ -101,12 +93,12 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
   reader1.addEventListener("load", function () {
     // convert image file to base64 string
     preview1.src = reader1.result;
-
   }, false);
   if (file1) {
     reader1.readAsDataURL(file1);
   }
   currentPlayerChip = document.querySelector('img').src;
+  $('#go').attr("disabled",false);
   if(twoPlayer){
     const preview2 = document.querySelector('img'); //The preview doesn't work
     const file2 = document.querySelector('input.pFile2[type=file]').files[0];
@@ -114,12 +106,12 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
     reader2.addEventListener("load", function () {
     // convert image file to base64 string
     preview2.src = reader2.result;
-
   }, false);
   if (file2) {
     reader2.readAsDataURL(file2);
   }
   nextPlayer = document.querySelector('img').src;//This works
+  $('#go').attr("disabled",false);
   }
 }
 function submit(k){
@@ -127,10 +119,12 @@ function submit(k){
   if (img==0){
     img1 = true;
     firstPlayer = "./images/"+k+".png";
+    $('#go').attr("disabled",false);
   }
   if (twoPlayer && img==1){
     img2 = true;
     nextPlayer = "./images/"+k+".png";
+    $('#go').attr("disabled",false);
   }
 }
 function addChip(column) {
@@ -143,7 +137,7 @@ function addChip(column) {
   if (twoPlayer) {
     var numPlayers = 2;
   } else {
-    var numPlayers = 1;
+    numPlayers = 1;
   }
   $.post(
     url+'?data='+JSON.stringify({
@@ -162,25 +156,31 @@ function checkWin() {
     }),
     response);
 }
-
 function resetBoard() {
   $.post(
     url+'?data='+JSON.stringify({
-      'action': 'resetBoard',
+      'action': 'resetGame',
     }),
     response);
+    for (let k = 1; k<=42;k++){
+        document.getElementById("chipimg"+k).setAttribute('src',"./images/white.jpg"); 
+    } 
+    resetV();
+}
+function resetGame(){
+    document.location.reload();
+    resetV();
+    resetBoard();
 }
 function iconChange(indexOfImg) {
   if(twoPlayer){
     if(img1 && img2){//Both radio buttons
       if (player1Turn){
         currentPlayerChip = firstPlayer;
-
       } else{
         currentPlayerChip = nextPlayer;
       }
     }else if(img1 && !img2){//First radio button second insert image
-
       if (player1Turn){
         currentPlayerChip = firstPlayer;
       } else{
@@ -209,7 +209,6 @@ function iconChange(indexOfImg) {
       currentPlayerChip = firstPlayer;
     }
   }
-
   document.getElementById("chipimg" + indexOfImg).setAttribute('src', currentPlayerChip);
 }
 function turnSwitch() {
@@ -252,8 +251,6 @@ function turnSwitch() {
     }
   }
 }
-
-
 function response(data,status){
   var response = JSON.parse(data);
   console.log(response['action']);
@@ -269,21 +266,32 @@ function response(data,status){
       if (winner != 0) {
         resetBoard();
         if (winner == 1) {
-          var confirmButton = confirm("P1 is Winner, would you like to play again")
-          $(".columnclass").css({'visibility' : 'hidden'});
+            var confirmButton = confirm("P1 is the Winner, would you like to play again?")
+            //$(".columnclass").css({'visibility' : 'hidden'});
         } else if (winner == 2) {
-          var confirmButton = confirm("P2 is Winner, would you like to play again")
-          $(".columnclass").css({'visibility' : 'hidden'});
+            if (twoPlayer){
+                confirmButton = confirm("P2 is the Winner, would you like to play again?")
+            }else{
+                confirmButton = confirm("Computer is the Winner, would you like to play again?")
+            }
+         //$(".columnclass").css({'visibility' : 'hidden'});
         }
-      }
-      if (confirmButton) {
-        console.log("confirmed");
-        resetGame();
-        $(".columnclass").css({'visibility' : 'visible'});
-        ($.chipimgclass).attr("src", "./images/white.jpg");
-
-      } else if (!confirmButton) {
-        window.open('','_self').close();
+        if (confirmButton) {
+            console.log("confirmed");
+            resetBoard();
+          }else if (!confirmButton) {
+            resetGame();
+          }
       }
     }
+}
+function resetV(){//resets the variables needed to reset Game and Board
+    $(".columnclass").css({'visibility' : 'visible'});
+    player1Turn = true; 
+    $.post(
+        url+'?data='+JSON.stringify({
+          'action': 'resetWinner',
+        }),
+        response);
+    imgIndex = 0;
 }
