@@ -10,7 +10,11 @@ var img1 = false;
 var img2 = false;
 var firstPlayer;
 var imgIndex = 0;
+var playAgain = false;
 var url = "http://localhost:3000/post";
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+ resetV();
+}
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 var playernum  = 1;
@@ -22,8 +26,7 @@ function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   mode('block');
 }
 function help(){//INSTRUCTION ARE DISPLAYED INSIDE AN ALERT WHEN CLICKED
-    alert("INSTRUCTIONS\n\nStart off by choosing a game mode of multiplayer or against the computer, which directs you to design your chip(s).In order to design your chips choose one of the options provided or input an image to set as a chip. The objective is to click on the columns of the board and connect 4 chips either vertically, horizontally or diagonally.");
-}
+  alert("INSTRUCTIONS\n- Start off by choosing a game mode of multiplayer or against the computer, which directs you to design your chip(s).\n- Next buttons have been disabled till the chip color/picture has been selected. If the player vs player game mode is selected both players are to design their respective chips with the color the former chose disabled. \n- The objective is to click on the columns of the board and connect 4 chips either vertically, horizontally, or diagonally. \n- After a win, the player is opted to choose to either play again or are redirected to the home page.\n- If the play again the option is selected the game mode remains the same along with the selected image/color.");}
 function mode(b){ //YO ADD COMMENTS FOR THESE TWO
   $("#gameMode1").css({'display' : b});
   $("#gameMode2").css({'display': b});
@@ -169,7 +172,6 @@ function resetBoard() {
 }
 function resetGame(){
     document.location.reload();
-    resetV();
     resetBoard();
 }
 function iconChange(indexOfImg) {
@@ -263,25 +265,51 @@ function response(data,status){
     if (response['action'] == 'checkWin'){
       winner = parseInt(response['winner']);
       console.log(winner);
-      if (winner != 0) {
+      if (winner != 0 && !playAgain) {
         resetBoard();
         if (winner == 1) {
+          if (twoPlayer){
             var confirmButton = confirm("P1 is the Winner, would you like to play again?")
-            //$(".columnclass").css({'visibility' : 'hidden'});
+        }else{
+            confirmButton = confirm("You are the Winner, would you like to play again?")
+        }
         } else if (winner == 2) {
             if (twoPlayer){
                 confirmButton = confirm("P2 is the Winner, would you like to play again?")
             }else{
                 confirmButton = confirm("Computer is the Winner, would you like to play again?")
             }
-         //$(".columnclass").css({'visibility' : 'hidden'});
+        }else if (winner == 3){
+          confirmButton = confirm("It's a DRAW, would you like to play again?")
         }
         if (confirmButton) {
             console.log("confirmed");
             resetBoard();
+            playAgain = true;
           }else if (!confirmButton) {
             resetGame();
           }
+      }else{
+        if (winner == 1) {
+          if (twoPlayer){
+            alert("P1 is the Winner, let's head to the home page!");
+            resetGame();
+        }else{
+          alert("You are the Winner, let's head to the home page!");
+          resetGame();
+        }
+        } else if (winner == 2) {
+            if (twoPlayer){
+              alert("P2 is the Winner, let's head to the home page!");
+              resetGame();
+            }else{
+              alert("Computer is the Winner, let's head to the home page!");
+              resetGame();
+            }
+        }else if (winner == 3){
+          alert("It's a DRAW, let's head to the home page!")
+          resetGame();
+        }
       }
     }
 }
