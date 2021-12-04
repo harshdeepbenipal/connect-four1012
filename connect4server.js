@@ -96,8 +96,8 @@ function checkVertical() {//check vertical win function
   var firstChip;
   var numInRow = 1;
   var lastChip;
-  for (let i = 0; i < 6; i++) {     //going through each row 
-    for (let j = 0; j < 7; j++) { 
+  for (let i = 0; i < 7; i++) {     //going through each row 
+    for (let j = 0; j < 6; j++) { 
       if (lastChip == gameboardArray[i][j] && gameboardArray[i][j] != 0) {
         numInRow += 1;
       } else {
