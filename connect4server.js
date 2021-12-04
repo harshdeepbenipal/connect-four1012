@@ -4,7 +4,7 @@ var winner;
 var document;
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
-board(); 
+board(); //calls on the board function to create a array to start the game
 var express = require('express');
 var app = express();
 
@@ -28,15 +28,14 @@ app.post('/post', (req, res) => {
           'imgIndex': imgIndex
       });
         // send the response while including the JSON text		
-        /*TODO 2 ... send the response including the JSON text*/
         res.send(jsontext);
     } 
     if(z['action'] == "checkWin"){
       console.log(gameboardArray);
-      if (checkFill()){
+      if (checkFill()){//if array is full winner is set to 3
         winner = 3;
-      }else{
-        winner = 0;
+      }else{//the array is checked, horizontally, vertically or diagnolally for any wins and sets the variable as such
+        winner = 0;//stays 0 unless there is a win
         if (checkHorizontal() != 0){
           console.log("Horizontal: " + checkHorizontal());
           winner = checkHorizontal();
@@ -67,14 +66,14 @@ app.post('/post', (req, res) => {
       res.send(jsontext);
     } 
     if(z['action'] == "resetGame"){
-        board();
+        board();//calls on the board function to reset and create a new array
     }
     if(z['action'] == "resetWinner"){
-      winner = 0;
+      winner = 0;//resets winner variable
     }
 }).listen(3000);
 console.log("Server is running!");
-function addChip(column, playerTurn) {
+function addChip(column, playerTurn) {//adds a chip in the array given the turn either 1 or 2
   if (firstFreeRow(column) < 6) {
     var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
     if (playerTurn == 1) {
@@ -191,8 +190,8 @@ function checkDiagonal(row, column) {
       }
   return [result,player];
 }
-function board(){
-  gameboardArray = []; //2D ARRAY FOR COLUMNS AND ROW CHECK
+function board(){//creates a new array full of 0, replacing the previous gameboardArray
+  gameboardArray = []; 
   for(let i = 0; i < 7; i++) {
     gameboardArray[i] = new Array(6);
     for(let j = 0; j < 6; j++) {
@@ -200,10 +199,10 @@ function board(){
     }
   }     
 }
-function checkFill(){
+function checkFill(){//Checks and returns true if the board/array is full, else false
   var filled = 0;
   for (let i = 0; i<gameboardArray.length;i++){
-    if (gameboardArray[i][5] != 0){
+    if (gameboardArray[i][5] != 0){//checks if the top row of the board is full if so filled increases
       filled++;
     }
   }
