@@ -8,6 +8,7 @@ var nextPlayer;//Image select if two players
 var userImageSrc;
 var img1 = false;
 var img2 = false;
+var won = false;
 var firstPlayer;
 var imgIndex = 0;
 var playAgain = false;
@@ -137,8 +138,8 @@ function addChip(column) {
   } else{
     playerTurn = 2;
   }
-  if (twoPlayer) {
-    var numPlayers = 2;
+  if (!twoPlayer && playerTurn == 2) {
+    playerTurn = 3;
   } else {
     numPlayers = 1;
   }
@@ -258,29 +259,38 @@ function response(data,status){
   console.log(response['action']);
     if (response['action'] == 'addChip'){
       imgIndex = parseInt(response['imgIndex']);
+      won = false;
       iconChange(imgIndex);
       turnSwitch();
       checkWin();
+      setTimeout(function(){
+        if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {
+          console.log("computer");
+          addChip();
+      }
+   },75);
     }
     if (response['action'] == 'checkWin'){
       winner = parseInt(response['winner']);
       console.log(winner);
       if (winner != 0 && !playAgain) {
+        setTimeout(function(){
+        won = true;
         resetBoard();
         if (winner == 1) {
           if (twoPlayer){
-            var confirmButton = confirm("P1 is the Winner, would you like to play again?")
+            var confirmButton = confirm("P1 is the Winner, would you like to play one more time?")
         }else{
-            confirmButton = confirm("You are the Winner, would you like to play again?")
+            confirmButton = confirm("You are the Winner, would you like to play one more time?")
         }
         } else if (winner == 2) {
             if (twoPlayer){
-                confirmButton = confirm("P2 is the Winner, would you like to play again?")
+                confirmButton = confirm("P2 is the Winner, would you like to play one more time?")
             }else{
-                confirmButton = confirm("Computer is the Winner, would you like to play again?")
+                confirmButton = confirm("Computer is the Winner, would you like to play one more time?")
             }
         }else if (winner == 3){
-          confirmButton = confirm("It's a DRAW, would you like to play again?")
+          confirmButton = confirm("It's a DRAW, would you like to play one more time?")
         }
         if (confirmButton) {
             console.log("confirmed");
@@ -289,29 +299,41 @@ function response(data,status){
           }else if (!confirmButton) {
             resetGame();
           }
+        },150);
       }else{
         if (winner == 1) {
           if (twoPlayer){
+            setTimeout(function(){
             alert("P1 is the Winner, let's head to the home page!");
             resetGame();
+          },150);
         }else{
+          setTimeout(function(){
           alert("You are the Winner, let's head to the home page!");
           resetGame();
+        },150);
         }
         } else if (winner == 2) {
             if (twoPlayer){
+              setTimeout(function(){
               alert("P2 is the Winner, let's head to the home page!");
               resetGame();
+            },150);
             }else{
+              setTimeout(function(){
               alert("Computer is the Winner, let's head to the home page!");
               resetGame();
+            },150);
             }
         }else if (winner == 3){
+          setTimeout(function(){
           alert("It's a DRAW, let's head to the home page!")
           resetGame();
+        },150);
         }
       }
     }
+    playerTurn = 1;
 }
 function resetV(){//resets the variables needed to reset Game and Board
     $(".columnclass").css({'visibility' : 'visible'});

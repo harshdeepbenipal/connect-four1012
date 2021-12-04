@@ -18,6 +18,10 @@ app.post('/post', (req, res) => {
         var column = z['column'];
         var playerTurn = z['playerTurn'];
         document = z['document'];
+        if(playerTurn == 3){
+          column = Math.floor(Math.random()*6);
+          console.log("column:"+ column);
+        }
         imgIndex = addChip(column, playerTurn);
         var jsontext = JSON.stringify({
           'action': 'addChip',
@@ -28,16 +32,17 @@ app.post('/post', (req, res) => {
         res.send(jsontext);
     } 
     if(z['action'] == "checkWin"){
+      console.log(gameboardArray);
       if (checkFill()){
         winner = 3;
       }else{
         winner = 0;
-      //console.log("Horizontal: " + checkHorizontal());
-      //console.log("Vertical: " + checkVertical());
         if (checkHorizontal() != 0){
+          console.log("Horizontal: " + checkHorizontal());
           winner = checkHorizontal();
         } else if (checkVertical() != 0) {
           winner = checkVertical();
+          console.log("Vertical: " + checkVertical());
         } 
         var i = 0;
         var j = 0;
@@ -70,7 +75,6 @@ app.post('/post', (req, res) => {
 }).listen(3000);
 console.log("Server is running!");
 function addChip(column, playerTurn) {
-  console.log(document);
   if (firstFreeRow(column) < 6) {
     var imgIndex = (5 - firstFreeRow(column))* 7 + 1 + parseInt(column);
     if (playerTurn == 1) {
@@ -79,8 +83,6 @@ function addChip(column, playerTurn) {
       gameboardArray[column][firstFreeRow(column)] = 2; 
     }
   }
-  console.log(gameboardArray[0]);
-  console.log(gameboardArray);
   return imgIndex
 }
 function firstFreeRow(column) {
