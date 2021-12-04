@@ -12,18 +12,18 @@
 </head>
 
 <body>
-  <div id="box">
+  <div id="box"><!--title-->
     <p id="title1" class="title">CONNECT 4</p>
   </div>
-  <div id="start">
+  <div id="start"><!--the start button-->
     <p> <button id="startButton" title= "Start Playing" onclick="playButton();"> START ▷ </button></p>
   </div> 
-  <div id="mode">
+  <div id="mode"><!--this is the buttons call function to choose gamemode-->
     <p> <button style="display: none;"class = "gmode" id="gameMode1" title= "Player Vs Computer" onclick="gameMode(false);"> Player Vs Computer </button></p>
     <p> <button style="display: none;"class = "gmode" id="gameMode2" title= "Player1 Vs Player2" onclick="gameMode(true);"> Player1 Vs Player2 </button></p>
   </div>
   <div id="design1">
-    <div style= "display: none;"id = radioButtons>
+    <div style= "display: none;"id = radioButtons> <!---this is the radiobutton options for choosing colour-->
       <input type="radio" id="Red" name="colour"  unchecked onchange="submit('Red')" >
       <label for="colour1">RED</label><br>
       <input type="radio" id="Yellow" name="colour" unchecked onchange="submit('Yellow')"> 
@@ -38,7 +38,7 @@
       <label for="colour6">PURPLE</label><br>
       </div>
   </div>
-  <div id="design2">
+  <div id="design2"><!--preview image button 1 and 2-->
     <div style="display:none" class="imgselect" id = "imgselect1">
       <input class= "pFile1" id="imageselector" type="file" onchange="previewFile()"><br>
       <img id= "img" class = "userImage" src="" height="200" alt="Image preview...">
@@ -53,8 +53,8 @@
   <img id = "board" src="images/Connect4Board.jpg" alt="boardimage" >
 </div>
   <footer>
-    <p> <button id="helpButton" title= "HELP" onclick="help();"> ? </button></p>
-    <p> <button id="home" title= "HOME" onclick="resetGame();"> HOME </button></p>
+    <p> <button id="helpButton" title= "HELP" onclick="help();"> ? </button></p><!--instructions on the bottom left-->
+    <p> <button id="home" title= "HOME" onclick="resetGame();"> HOME </button></p><!--reset game to home button on the bottom left-->
   </footer>
   </body>
 

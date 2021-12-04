@@ -1,3 +1,4 @@
+//========================GLOBAL VARIABLES================================
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
 var choice;
@@ -20,6 +21,7 @@ if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {//Suppos
 //empty = 0, p1 = 1, p2 = 2
 var playernum  = 1;
 var amount = 1;
+//==================MAIN FUNCTIONS CALLED=================================================
 function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   $("#startButton").css({'display' : 'none'});
   var element = document.getElementById("title1");
@@ -103,8 +105,8 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
   }
   currentPlayerChip = document.querySelector('img').src;
   $('#go').attr("disabled",false);
-  if(twoPlayer){//if player 1 vs player 2, selects image for player 2
-    const preview2 = document.querySelector('img'); //The preview doesn't work
+  if(twoPlayer){
+    const preview2 = document.querySelector('img'); //PREVIEW IMAGE
     const file2 = document.querySelector('input.pFile2[type=file]').files[0];
     const reader2 = new FileReader();
     reader2.addEventListener("load", function () {
@@ -114,8 +116,8 @@ function previewFile() { //PREVIEW IMAGE AND IMAGE SELECTOR AND STORE IMAGE FOR 
   if (file2) {
     reader2.readAsDataURL(file2);
   }
-  nextPlayer = document.querySelector('img').src;//This works
-  $('#go').attr("disabled",false);//button to continue no longer disabled, and continues to next page
+  nextPlayer = document.querySelector('img').src;//next player image
+  $('#go').attr("disabled",false);
   }
 }
 function submit(k){//Called on when radio button is clicked, the parameter the colour name
@@ -131,19 +133,19 @@ function submit(k){//Called on when radio button is clicked, the parameter the c
     $('#go').attr("disabled",false);
   }
 }
-function addChip(column) {//Adds a chip in the selected column given in the parameter
+function addChip(column) {//addchip chip to array which sets a number inside the array 1 or 2
   imgIndex = 0;
-  if (player1Turn) {
+  if (player1Turn) {//checks player turn and used later on
     playerTurn = 1;
   } else{
     playerTurn = 2;
   }
-  if (!twoPlayer && playerTurn == 2) {
+  if (!twoPlayer && playerTurn == 2) {//this is for when u choose to play againist computer and so the 2nd player turn is disabled
     playerTurn = 3;
   } else {
     numPlayers = 1;
   }
-  $.post(
+  $.post(//sends information to server side 
     url+'?data='+JSON.stringify({
       'column': column,
       'action': 'addChip',
@@ -257,20 +259,20 @@ function turnSwitch() {//Switches between turns and chips
 function response(data,status){
   var response = JSON.parse(data);
   console.log(response['action']);
-    if (response['action'] == 'addChip'){
-      imgIndex = parseInt(response['imgIndex']);
+    if (response['action'] == 'addChip'){// response from server when addchip is called and peforms the stuff inside of the if statement and calls other functions
+      imgIndex = parseInt(response['imgIndex']); 
       won = false;
       iconChange(imgIndex);
       turnSwitch();
       checkWin();
-      setTimeout(function(){
-        if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {
+      setTimeout(function(){//everytime we use this is due to the fact there is a delay from the server and it causes bugs occasionally where u can't see the win but it works now cause of this
+        if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {//when the computer places on the board and the following is the requirements for the computer to work
           console.log("computer");
           addChip();
       }
    },75);
     }
-    if (response['action'] == 'checkWin'){
+    if (response['action'] == 'checkWin'){ //response from server when checkwin is called
       winner = parseInt(response['winner']);
       console.log(winner);
       if (winner != 0 && !playAgain) {

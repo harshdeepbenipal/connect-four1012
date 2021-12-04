@@ -1,3 +1,4 @@
+/*============GLOBAL VARIABLES=====================*/
 var gameboardArray;    
 var imgIndex;
 var winner;  
@@ -8,7 +9,7 @@ board(); //calls on the board function to create a array to start the game
 var express = require('express');
 var app = express();
 
-
+/*GETS CALLED BY THE CLIENT SIDE AND CALLS TEH FUCNTIONS ADDCHIP AND WHEN PLAYERTURN  == 3*/
 app.post('/post', (req, res) => {
     res.header("Access-Control-Allow-Origin", "*");
     console.log("New express client      Received: " + JSON.parse(req.query['data']));
@@ -30,7 +31,7 @@ app.post('/post', (req, res) => {
         // send the response while including the JSON text		
         res.send(jsontext);
     } 
-    if(z['action'] == "checkWin"){
+    if(z['action'] == "checkWin"){/*WHEN CHECKWIN IS CALLED BY CLIENT SIDE THE IF STATEMENT GOES AND DOES EVERYTHING WITHIN IT*/
       console.log(gameboardArray);
       if (checkFill()){//if array is full winner is set to 3
         winner = 3;
@@ -84,14 +85,14 @@ function addChip(column, playerTurn) {//adds a chip in the array given the turn 
   }
   return imgIndex
 }
-function firstFreeRow(column) {
+function firstFreeRow(column) {//checks if there is an empty slot
   for (let i = 0; i < 6; i++) {
     if (gameboardArray[parseInt(column)][i] == 0) {
       return i;
     }
   }
 }
-function checkVertical() {
+function checkVertical() {//check vertical win function
   var firstChip;
   var numInRow = 1;
   var lastChip;
@@ -117,7 +118,7 @@ function checkVertical() {
   }
   return 0;
 }
-function checkHorizontal() {
+function checkHorizontal() {//check horizontal win function
   var firstChip;
   var numInRow = 1;
   var lastChip;
@@ -144,7 +145,7 @@ function checkHorizontal() {
   }
   return 0;
 }
-function checkDiagonal(row, column) {
+function checkDiagonal(row, column) {//check diagonal win function
   var result = false;
   var player;
   var numRows = 6;
