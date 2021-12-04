@@ -18,9 +18,9 @@ app.post('/post', (req, res) => {
         var column = z['column'];
         var playerTurn = z['playerTurn'];
         document = z['document'];
-        console.log(playerTurn);
         if(playerTurn == 3){
           column = Math.floor(Math.random()*6);
+          console.log("column:"+ column);
         }
         imgIndex = addChip(column, playerTurn);
         var jsontext = JSON.stringify({
@@ -32,27 +32,31 @@ app.post('/post', (req, res) => {
         res.send(jsontext);
     } 
     if(z['action'] == "checkWin"){
-      winner = 0;
       console.log(gameboardArray);
-      //console.log("Horizontal: " + checkHorizontal());
-      //console.log("Vertical: " + checkVertical());
-      if (checkHorizontal() != 0){
-        winner = checkHorizontal();
-      } else if (checkVertical() != 0) {
-        winner = checkVertical();
-      } 
-      var i = 0;
-      var j = 0;
-      var flag = false
-      while(i < 6 && flag == false)
-      {   
-        for (let j = 0; j < 7; j++) { 
-          if(checkDiagonal(i, j)[0]){
-            flag = true;
-            winner = checkDiagonal(i, j)[1];
+      if (checkFill()){
+        winner = 3;
+      }else{
+        winner = 0;
+        if (checkHorizontal() != 0){
+          console.log("Horizontal: " + checkHorizontal());
+          winner = checkHorizontal();
+        } else if (checkVertical() != 0) {
+          winner = checkVertical();
+          console.log("Vertical: " + checkVertical());
+        } 
+        var i = 0;
+        var j = 0;
+        var flag = false
+        while(i < 6 && flag == false)
+        {   
+          for (let j = 0; j < 7; j++) { 
+            if(checkDiagonal(i, j)[0]){
+              flag = true;
+              winner = checkDiagonal(i, j)[1];
+            }
           }
+          i++;
         }
-        i++;
       }
       //console.log(winner);
       var jsontext = JSON.stringify({
@@ -195,4 +199,17 @@ function board(){
       gameboardArray[i][j] = 0;
     }
   }     
+}
+function checkFill(){
+  var filled = 0;
+  for (let i = 0; i<gameboardArray.length;i++){
+    if (gameboardArray[i][5] != 0){
+      filled++;
+    }
+  }
+  if (filled == 7){
+    return true;
+  }else{
+    return false;
+  }
 }

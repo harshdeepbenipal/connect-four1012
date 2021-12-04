@@ -1,16 +1,21 @@
 var player1Turn = true; //VARIABLE FOR CHECKING PLAYERTURN
 var img = 0; 
 var choice;
-var winner = 0;
+var winner;
 var currentPlayerChip; // USED TO USER IMAGE FOR IMAGE SELECT
 var twoPlayer;//boolean for game mode
 var nextPlayer;//Image select if two players
 var userImageSrc;
 var img1 = false;
 var img2 = false;
+var won = false;
 var firstPlayer;
 var imgIndex = 0;
+var playAgain = false;
 var url = "http://localhost:3000/post";
+if (performance.navigation.type == performance.navigation.TYPE_RELOAD) {
+ resetV();
+}
 //from left to right, bottom to top
 //empty = 0, p1 = 1, p2 = 2
 var playernum  = 1;
@@ -22,8 +27,7 @@ function playButton() { //TAKES THE USER TO THE SELECT GAMEMODE SCREEN
   mode('block');
 }
 function help(){//INSTRUCTION ARE DISPLAYED INSIDE AN ALERT WHEN CLICKED
-    alert("INSTRUCTIONS\n\nStart off by choosing a game mode of multiplayer or against the computer, which directs you to design your chip(s).In order to design your chips choose one of the options provided or input an image to set as a chip. The objective is to click on the columns of the board and connect 4 chips either vertically, horizontally or diagonally.");
-}
+  alert("INSTRUCTIONS\n- Start off by choosing a game mode of multiplayer or against the computer, which directs you to design your chip(s).\n- Next buttons have been disabled till the chip color/picture has been selected. If the player vs player game mode is selected both players are to design their respective chips with the color the former chose disabled. \n- The objective is to click on the columns of the board and connect 4 chips either vertically, horizontally, or diagonally. \n- After a win, the player is opted to choose to either play again or are redirected to the home page.\n- If the play again the option is selected the game mode remains the same along with the selected image/color.");}
 function mode(b){ //YO ADD COMMENTS FOR THESE TWO
   $("#gameMode1").css({'display' : b});
   $("#gameMode2").css({'display': b});
@@ -136,6 +140,8 @@ function addChip(column) {
   }
   if (!twoPlayer && playerTurn == 2) {
     playerTurn = 3;
+  } else {
+    numPlayers = 1;
   }
   $.post(
     url+'?data='+JSON.stringify({
@@ -143,7 +149,7 @@ function addChip(column) {
       'action': 'addChip',
       'playerTurn' : playerTurn,
       'document': document,
-      
+      'twoplayers' : numPlayers
     }),
     response);
   }
@@ -167,7 +173,6 @@ function resetBoard() {
 }
 function resetGame(){
     document.location.reload();
-    resetV();
     resetBoard();
 }
 function iconChange(indexOfImg) {
@@ -251,42 +256,84 @@ function turnSwitch() {
 }
 function response(data,status){
   var response = JSON.parse(data);
+  console.log(response['action']);
     if (response['action'] == 'addChip'){
       imgIndex = parseInt(response['imgIndex']);
-      var won = false;
+      won = false;
       iconChange(imgIndex);
       turnSwitch();
       checkWin();
-      console.log(twoPlayer);
-      console.log(playerTurn);
-      if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {
-        console.log("computer");
-        addChip();
+      setTimeout(function(){
+        if (!twoPlayer && playerTurn == 1 && winner == 0 && !won) {
+          console.log("computer");
+          addChip();
       }
+   },75);
     }
     if (response['action'] == 'checkWin'){
       winner = parseInt(response['winner']);
       console.log(winner);
-      if (winner != 0) {
-        console.log("flag");
+      if (winner != 0 && !playAgain) {
+        setTimeout(function(){
         won = true;
         resetBoard();
         if (winner == 1) {
-            var confirmButton = confirm("P1 is the Winner, would you like to play again?")
-            //$(".columnclass").css({'visibility' : 'hidden'});
+          if (twoPlayer){
+            var confirmButton = confirm("P1 is the Winner, would you like to play one more time?")
+        }else{
+            confirmButton = confirm("You are the Winner, would you like to play one more time?")
+        }
         } else if (winner == 2) {
             if (twoPlayer){
-                confirmButton = confirm("P2 is the Winner, would you like to play again?")
+                confirmButton = confirm("P2 is the Winner, would you like to play one more time?")
             }else{
-                confirmButton = confirm("Computer is the Winner, would you like to play again?")
+                confirmButton = confirm("Computer is the Winner, would you like to play one more time?")
             }
-         //$(".columnclass").css({'visibility' : 'hidden'});
+        }else if (winner == 3){
+          confirmButton = confirm("It's a DRAW, would you like to play one more time?")
         }
-      if(!confirmButton){
-        resetGame();
-      }
+        if (confirmButton) {
+            console.log("confirmed");
+            resetBoard();
+            playAgain = true;
+          }else if (!confirmButton) {
+            resetGame();
+          }
+        },150);
+      }else{
+        if (winner == 1) {
+          if (twoPlayer){
+            setTimeout(function(){
+            alert("P1 is the Winner, let's head to the home page!");
+            resetGame();
+          },150);
+        }else{
+          setTimeout(function(){
+          alert("You are the Winner, let's head to the home page!");
+          resetGame();
+        },150);
+        }
+        } else if (winner == 2) {
+            if (twoPlayer){
+              setTimeout(function(){
+              alert("P2 is the Winner, let's head to the home page!");
+              resetGame();
+            },150);
+            }else{
+              setTimeout(function(){
+              alert("Computer is the Winner, let's head to the home page!");
+              resetGame();
+            },150);
+            }
+        }else if (winner == 3){
+          setTimeout(function(){
+          alert("It's a DRAW, let's head to the home page!")
+          resetGame();
+        },150);
+        }
       }
     }
+    playerTurn = 1;
 }
 function resetV(){//resets the variables needed to reset Game and Board
     $(".columnclass").css({'visibility' : 'visible'});
